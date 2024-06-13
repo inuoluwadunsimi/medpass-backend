@@ -51,10 +51,9 @@ async function bootstrap() {
   );
 
   const options = new DocumentBuilder()
-    .setTitle('Glouse backend ')
-    .setDescription('API  documentation for glouse app')
+    .setTitle('Medpass backend ')
+    .setDescription('API  documentation medpass ')
     .setVersion('1.0.0')
-    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/docs', app, document);
