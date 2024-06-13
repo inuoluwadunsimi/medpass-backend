@@ -16,8 +16,7 @@ async function bootstrap() {
 
   const allowedOrigins = [
     'http://localhost:3002',
-    'https://useglouse.com',
-    'https://admin.useglouse.com',
+
   ];
 
   app.enableCors({
