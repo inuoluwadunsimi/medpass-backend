@@ -12,8 +12,6 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const allowedOrigins = [
         'http://localhost:3002',
-        'https://useglouse.com',
-        'https://admin.useglouse.com',
     ];
     app.enableCors({
         origin: allowedOrigins,
@@ -37,10 +35,9 @@ async function bootstrap() {
         },
     }));
     const options = new swagger_1.DocumentBuilder()
-        .setTitle('Glouse backend ')
-        .setDescription('API  documentation for glouse app')
+        .setTitle('Medpass backend ')
+        .setDescription('API  documentation medpass ')
         .setVersion('1.0.0')
-        .addBearerAuth()
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, options);
     swagger_1.SwaggerModule.setup('/docs', app, document);

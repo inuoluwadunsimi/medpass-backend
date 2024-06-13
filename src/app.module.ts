@@ -5,10 +5,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './filters/http.exception.filter';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env['MONGODB_URI'] as string),
+    MongooseModule.forRoot(process.env.MONGODB_URI),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
   ],
   controllers: [AppController],

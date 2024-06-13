@@ -14,13 +14,15 @@ const mongoose_1 = require("@nestjs/mongoose");
 const config_1 = require("@nestjs/config");
 const core_1 = require("@nestjs/core");
 const http_exception_filter_1 = require("./filters/http.exception.filter");
+const dotenv = require("dotenv");
+dotenv.config();
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot(process.env['MONGODB_URI']),
+            mongoose_1.MongooseModule.forRoot(process.env.MONGODB_URI),
             config_1.ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
         ],
         controllers: [app_controller_1.AppController],
