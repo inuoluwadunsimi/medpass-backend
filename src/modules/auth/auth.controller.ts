@@ -77,4 +77,22 @@ export class AuthController {
       ResponseManager.handleError(res, err);
     }
   }
+
+  @Post("/otp/resend")
+  @ApiResponse({ status: 200, description: "OTP sent successfully" })
+  public async resendOtp(
+    @Body() email: string,
+    @Req() req: Request,
+    @Res() res: Response
+  ): Promise<void> {
+    const deviceId = req.get("User-Agent");
+    try {
+      await this.authService.resendOtp(email, deviceId);
+      ResponseManager.success(res, {
+        message: "OTP sent successfully",
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
 }

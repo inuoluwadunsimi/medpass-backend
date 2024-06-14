@@ -78,6 +78,7 @@ export class AuthService {
       email: body.email,
       otp: body.otp,
       deviceId,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
     });
 
     if (!otp) {
@@ -99,5 +100,20 @@ export class AuthService {
       user,
     });
     return response;
+  }
+
+  public async resendOtp(email: string, deviceId: string): Promise<void> {
+    const user = await this.userModel.findOne<UserDocument>({ email });
+    if (!user) {
+      throw new NotFoundException("user not found");
+    }
+    const otp = this.userService.generateOtp();
+    await this.otpModel.create({
+      email,
+      otp,
+      deviceId,
+      otpType: OtpType.SIGN_UP,
+    });
+    await this.emailService.sendOtpMail(email, otp, user.firstName);
   }
 }
