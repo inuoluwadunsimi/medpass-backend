@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import * as bcrypt from "bcrypt";
 import { Model } from "mongoose";
@@ -11,10 +11,11 @@ import {
   UserAuthDocument,
   UserDocument,
 } from "../user/schemas";
-import { SignupDto } from "./dtos/signup.dto";
+import { SignupDto, VerifyOtp } from "./dtos/signup.dto";
 import { UserRole } from "../user/interfaces/user.enums";
 import { UserService } from "../user/user.service";
 import { EmailService } from "../mail/mail.service";
+import { JwtHelper } from "./jwt/jwt.helper";
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,8 @@ export class AuthService {
     @InjectModel(UserAuth.name) private userAuthModel: Model<UserAuthDocument>,
     @InjectModel(Otp.name) private otpModel: Model<OtpDocument>,
     private readonly userService: UserService,
-    private readonly emailService: EmailService
+    private readonly emailService: EmailService,
+    private readonly jwtHelper: JwtHelper
   ) {}
 
   public async ownerRegister(
@@ -58,5 +60,24 @@ export class AuthService {
     await this.emailService.sendOtpMail(body.email, otp, body.firstName);
 
     return otp;
+  }
+
+  public async verifyOtp(body: VerifyOtp, deviceId: string): Promise<void> {
+    const otp = await this.otpModel.findOne<OtpDocument>({
+      email: body.email,
+      otp: body.otp,
+      deviceId,
+    });
+
+    if (!otp) {
+      throw new NotFoundException("invalid otp");
+    }
+
+    await this.userAuthModel.updateOne(
+      { email: body.email },
+      { isVerified: true }
+    );
+
+    await this.otpModel.deleteOne({ email: body.email, otp: body.otp });
   }
 }
