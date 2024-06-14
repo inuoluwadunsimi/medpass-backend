@@ -67,7 +67,7 @@ export class User {
     enum: Object.values(UserRole),
     default: UserRole.DOCTOR,
   })
-  role: UserRole.DOCTOR;
+  role: UserRole;
 }
 
 export type UserDocument = User & Document;

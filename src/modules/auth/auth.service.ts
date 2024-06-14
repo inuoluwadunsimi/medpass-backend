@@ -16,6 +16,8 @@ import { UserRole } from "../user/interfaces/user.enums";
 import { UserService } from "../user/user.service";
 import { EmailService } from "../mail/mail.service";
 import { JwtHelper } from "./jwt/jwt.helper";
+import { JwtType } from "./jwt/jwt.interface";
+import { AuthResponse } from "./interfaces/auth.responses";
 
 @Injectable()
 export class AuthService {
@@ -62,7 +64,16 @@ export class AuthService {
     return otp;
   }
 
-  public async verifyOtp(body: VerifyOtp, deviceId: string): Promise<void> {
+  public async verifyOtp(
+    body: VerifyOtp,
+    deviceId: string
+  ): Promise<AuthResponse> {
+    const user = await this.userModel.findOne<UserDocument>({
+      email: body.email,
+    });
+    if (!user) {
+      throw new NotFoundException("user not found");
+    }
     const otp = await this.otpModel.findOne<OtpDocument>({
       email: body.email,
       otp: body.otp,
@@ -79,5 +90,14 @@ export class AuthService {
     );
 
     await this.otpModel.deleteOne({ email: body.email, otp: body.otp });
+    const response = await this.userService.saveUserToken({
+      email: body.email,
+      userId: user.id,
+      type: user.role === UserRole.ADMIN ? JwtType.ADMIN : JwtType.USER,
+      deviceId,
+      role: user.role,
+      user,
+    });
+    return response;
   }
 }

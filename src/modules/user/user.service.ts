@@ -11,6 +11,9 @@ import {
 } from "./schemas";
 import randomString from "randomstring";
 import { AuthResponse } from "../auth/interfaces/auth.responses";
+import { JwtHelper } from "../auth/jwt/jwt.helper";
+import { GenerateTokenParam } from "../auth/jwt/jwt.interface";
+import { SaveToken } from "./interfaces/user.requests";
 
 @Injectable()
 export class UserService {
@@ -18,7 +21,8 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(UserAuth.name) private userAuthModel: Model<UserAuthDocument>,
     @InjectModel(UserToken.name)
-    private userTokenModel: Model<UserTokenDocument>
+    private userTokenModel: Model<UserTokenDocument>,
+    private readonly jwtHelper: JwtHelper
   ) {}
 
   public async createUser(user: Partial<UserDocument>): Promise<UserDocument> {
@@ -40,18 +44,21 @@ export class UserService {
     });
   }
 
-  async saveUserToken(
-    user: UserDocument,
-    deviceId: string,
-    accessToken: string,
-    refreshToken?: string
-  ): Promise<AuthResponse> {
+  async saveUserToken(body: SaveToken): Promise<AuthResponse> {
+    const { email, userId, type, deviceId, role, user } = body;
+    const token = this.jwtHelper.generateToken({
+      email,
+      userId,
+      type,
+      deviceId,
+      role,
+    });
+
     await this.userTokenModel.updateOne(
-      { email: user.email },
+      { email: email },
       {
         deviceId,
-        accessToken,
-        refreshToken,
+        ...token,
         user: user.id,
       },
       { upsert: true }
@@ -59,8 +66,7 @@ export class UserService {
 
     return {
       user,
-      accessToken,
-      refreshToken,
+      ...token,
     };
   }
 }
