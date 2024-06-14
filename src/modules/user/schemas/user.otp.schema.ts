@@ -1,8 +1,15 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+
+// this import helps to define the schemas of the models in the swagger docs
 import { ApiProperty } from "@nestjs/swagger";
 import { v4 as uuidv4 } from "uuid";
-import { UserRole } from "../interfaces/user.enums";
 import { Document } from "mongoose";
+
+export enum OtpType {
+  SIGN_UP = "SIGNUP",
+  LOGIN = "LOGIN",
+  FORGOT_PASSWORD = "FORGOT_PASSWORD",
+}
 
 @Schema({
   timestamps: true,
@@ -22,9 +29,11 @@ import { Document } from "mongoose";
     },
   },
 })
-export class User {
+export class Otp {
+  // switched to uuids because they are easier to use compared to objectId's
   @ApiProperty()
   @Prop({
+    required: true,
     type: String,
     default: function genUUID() {
       return uuidv4();
@@ -37,41 +46,42 @@ export class User {
     required: true,
     unique: true,
     type: String,
+    lowercase: true,
   })
   email: string;
 
   @ApiProperty()
   @Prop({
-    required: false,
+    required: true,
     type: String,
   })
-  firstName: string;
+  otp: string;
 
   @ApiProperty()
   @Prop({
-    required: false,
+    required: true,
     type: String,
   })
-  lastName: string;
-
-  @ApiProperty()
-  @Prop({
-    required: false,
-    type: String,
-  })
-  phoneNumber: string;
+  deviceId: string;
 
   @ApiProperty()
   @Prop({
     type: String,
-    enum: Object.values(UserRole),
-    default: UserRole.DOCTOR,
+    enum: Object.values(OtpType),
+    default: OtpType.SIGN_UP,
   })
-  role: UserRole.DOCTOR;
+  otpType: OtpType;
+
+  @ApiProperty()
+  @Prop({
+    type: Date,
+    required: true,
+    default: Date.now(),
+    index: { expires: "10m" },
+  })
+  expiresAt: Date;
 }
 
-export type UserDocument = User & Document;
-export const UserSchema = SchemaFactory.createForClass(User).set(
-  "versionKey",
-  false
-);
+export type OtpDocument = Otp & Document;
+
+export const OtpSchema = SchemaFactory.createForClass(Otp);

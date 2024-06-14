@@ -2,6 +2,7 @@ import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User, UserAuthDocument, UserDocument, UserAuth } from "./schemas";
+import randomString from "randomstring";
 
 @Injectable()
 export class UserService {
@@ -20,5 +21,12 @@ export class UserService {
       throw new NotFoundException("user does not exist");
     }
     return user;
+  }
+
+  public generateOtp(): string {
+    return randomString.generate({
+      length: 6,
+      charset: "numeric",
+    });
   }
 }
