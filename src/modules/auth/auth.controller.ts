@@ -14,6 +14,6 @@ import {
 } from "@nestjs/common";
 
 import { ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
-@Controller("user")
-@ApiTags("user")
-export class UserController {}
+@Controller("auth")
+@ApiTags("auth")
+export class AuthController {}
