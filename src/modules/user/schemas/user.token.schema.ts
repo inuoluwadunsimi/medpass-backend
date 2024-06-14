@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { v4 as uuidv4 } from "uuid";
 import { Document } from "mongoose";
-import { User } from "./user.schema";
+import { User, UserDocument } from "./user.schema";
 
 @Schema({
   timestamps: true,
@@ -73,7 +73,7 @@ export class UserToken {
     ref: User.name,
     required: true,
   })
-  user: string;
+  user: string | UserDocument;
 }
 
 export type UserTokenDocument = UserToken & Document;

@@ -7,6 +7,7 @@ import { User, UserAuth, UserAuthSchema, UserSchema } from "./schemas";
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: UserAuth.name, schema: UserAuthSchema },
+      { name: UserAuth.name, schema: UserAuthSchema },
     ]),
   ],
 })
