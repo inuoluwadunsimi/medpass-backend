@@ -11,9 +11,9 @@ import {
   Res,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
+import { AuthResponse } from "../auth/interfaces/auth.responses";
 
 import {
   ApiConsumes,
@@ -60,8 +60,7 @@ export class AuthController {
   @Post("otp/verify")
   @ApiResponse({
     status: 201,
-    description: "Registered Successfully",
-    type: String,
+    type: AuthResponse,
   })
   public async verifyOtp(
     @Body() body: VerifyOtp,
@@ -72,7 +71,6 @@ export class AuthController {
     try {
       const data = await this.authService.verifyOtp(body, deviceId);
       ResponseManager.success(res, {
-        message: "Registered Successfully",
         data,
       });
     } catch (err) {
