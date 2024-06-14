@@ -14,6 +14,7 @@ import {
 import { SignupDto } from "./dtos/signup.dto";
 import { UserRole } from "../user/interfaces/user.enums";
 import { UserService } from "../user/user.service";
+import { EmailService } from "../mail/mail.service";
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,8 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(UserAuth.name) private userAuthModel: Model<UserAuthDocument>,
     @InjectModel(Otp.name) private otpModel: Model<OtpDocument>,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly emailService: EmailService
   ) {}
 
   public async ownerRegister(
@@ -52,6 +54,8 @@ export class AuthService {
       deviceId,
       otpType: OtpType.SIGN_UP,
     });
+
+    await this.emailService.sendOtpMail(body.email, otp, body.firstName);
 
     return otp;
   }
