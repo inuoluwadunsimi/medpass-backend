@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { v4 as uuidv4 } from "uuid";
-import { Roles } from "../interfaces/user.enums";
+import { UserRole } from "../interfaces/user.enums";
 import { Document } from "mongoose";
 
 @Schema({
@@ -50,10 +50,10 @@ export class User {
   @ApiProperty()
   @Prop({
     type: String,
-    enum: Object.values(Roles),
-    default: Roles.DOCTOR,
+    enum: Object.values(UserRole),
+    default: UserRole.DOCTOR,
   })
-  role: Roles.DOCTOR;
+  role: UserRole.DOCTOR;
 }
 
 export type UserDocument = User & Document;
