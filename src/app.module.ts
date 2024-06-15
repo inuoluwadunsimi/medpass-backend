@@ -10,6 +10,7 @@ import * as dotenv from "dotenv";
 import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { HospitalModule } from "./modules/hospital/hospital.module";
+import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 dotenv.config();
 
 @Module({
@@ -18,6 +19,7 @@ dotenv.config();
     UserModule,
     AuthModule,
     HospitalModule,
+    CloudinaryModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
     MailerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
