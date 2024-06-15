@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Patch,
   Post,
   Req,
@@ -44,6 +45,21 @@ export class HospitalController {
       const data = await this.hospitalService.createHospital(body, user);
       ResponseManager.success(res, { data });
     } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Get("/:hospitalId")
+  @ApiResponse({ status: 200, type: Hospital })
+  public async getHospitalProfile(
+    @Param() hospitalId: string,
+    @Res() res: Response
+  ): Promise<void> {
+    try {
+      const hospital =
+        await this.hospitalService.getHospitalProfile(hospitalId);
+      ResponseManager.success(res, { hospital });
+    } catch (err) {
       ResponseManager.handleError(res, err);
     }
   }

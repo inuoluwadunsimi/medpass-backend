@@ -10,10 +10,26 @@ export class HospitalService {
     @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>
   ) {}
 
-  public async createHospital(body: CreateHospitalDto, user: string) {
+  public async createHospital(
+    body: CreateHospitalDto,
+    user: string
+  ): Promise<HospitalDocument> {
     return await this.hospitalModel.create({
       created_by: user,
       ...body,
     });
+  }
+
+  public async getHospitalProfile(
+    hospitalId: string
+  ): Promise<HospitalDocument> {
+    const hospital = await this.hospitalModel.findOne<HospitalDocument>({
+      _id: hospitalId,
+    });
+    if (!hospital) {
+      throw new NotFoundException("hospital not found");
+    }
+
+    return hospital;
   }
 }
