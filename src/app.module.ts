@@ -7,11 +7,17 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { APP_FILTER } from "@nestjs/core";
 import { HttpExceptionFilter } from "./filters/http.exception.filter";
 import * as dotenv from "dotenv";
+import { UserModule } from "./modules/user/user.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { HospitalModule } from "./modules/hospital/hospital.module";
 dotenv.config();
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGODB_URI),
+    UserModule,
+    AuthModule,
+    HospitalModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
     MailerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({

@@ -13,14 +13,9 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { AuthResponse } from "../auth/interfaces/auth.responses";
+import { AuthResponse } from "./interfaces/auth.responses";
 
-import {
-  ApiConsumes,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
 import { SignupDto, VerifyOtp } from "./dtos/signup.dto";

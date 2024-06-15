@@ -1,38 +1,35 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import helmet from 'helmet';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import helmet from "helmet";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import {
   ValidationError,
   ValidationPipe,
   VersioningType,
-} from '@nestjs/common';
-import ValidationExceptions from './exceptions/validations.exceptions';
-import { ConfigService } from '@nestjs/config';
-import { NotFoundExceptionFilter } from './exceptions/notfound.exceptions';
+} from "@nestjs/common";
+import ValidationExceptions from "./exceptions/validations.exceptions";
+import { ConfigService } from "@nestjs/config";
+import { NotFoundExceptionFilter } from "./exceptions/notfound.exceptions";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const allowedOrigins = [
-    'http://localhost:3002',
-
-  ];
+  const allowedOrigins = ["http://localhost:3002"];
 
   app.enableCors({
     origin: allowedOrigins,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type,Authorization,x-auth-token,X-Auth-Token',
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization,x-auth-token,X-Auth-Token",
     credentials: true,
   });
   const configService = app.get(ConfigService);
-  const port = configService.get<number>('PORT') || 3000;
+  const port = configService.get<number>("PORT") || 3000;
 
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (errors: ValidationError[]) =>
         new ValidationExceptions(errors),
-    }),
+    })
   );
 
   app.useGlobalFilters(new NotFoundExceptionFilter());
@@ -45,18 +42,19 @@ async function bootstrap() {
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'"],
-        connectSrc: ["'self'", 'https://accounts.google.com'],
+        connectSrc: ["'self'", "https://accounts.google.com"],
       },
-    }),
+    })
   );
 
   const options = new DocumentBuilder()
-    .setTitle('Medpass backend ')
-    .setDescription('API  documentation medpass ')
-    .setVersion('1.0.0')
+    .setTitle("Medpass backend ")
+    .setDescription("API  documentation medpass ")
+    .setVersion("1.0.0")
+    .addBasicAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('/docs', app, document);
+  SwaggerModule.setup("/docs", app, document);
 
   await app.listen(port);
 }
