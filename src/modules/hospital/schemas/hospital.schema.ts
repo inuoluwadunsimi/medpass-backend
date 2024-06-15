@@ -63,10 +63,16 @@ export class Hospital {
   @ApiProperty()
   @Prop({
     required: true,
+    type: String,
+  })
+  phone: string;
+
+  @ApiProperty()
+  @Prop({
     type: Boolean,
     default: false,
   })
-  verified: boolean;
+  kycVerified: boolean;
 }
 
 export type HospitalDocument = Hospital & Document;

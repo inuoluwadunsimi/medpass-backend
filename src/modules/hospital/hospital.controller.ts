@@ -13,8 +13,15 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { HospitalService } from "./hospital.service";
 
 @Controller("hospital")
 @ApiTags("hospital")
-export class HospitalController {}
+export class HospitalController {
+  constructor(private readonly hospitalService: HospitalService) {}
+
+  @Post()
+  @ApiResponse({})
+  public async createHospital(): Promise<void> {}
+}
