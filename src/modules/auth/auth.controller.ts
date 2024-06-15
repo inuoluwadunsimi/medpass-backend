@@ -20,6 +20,7 @@ import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
 import { SignupDto, VerifyOtp } from "./dtos/signup.dto";
 import { Request, Response } from "express";
+import { LoginDto } from "./dtos/login.dto";
 
 @Controller("auth")
 @ApiTags("auth")
@@ -85,6 +86,24 @@ export class AuthController {
       await this.authService.resendOtp(email, deviceId);
       ResponseManager.success(res, {
         message: "OTP sent successfully",
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Post("login")
+  @ApiResponse({ status: 200, type: AuthResponse })
+  public async login(
+    @Body() body: LoginDto,
+    @Req() req: Request,
+    @Res() res: Response
+  ): Promise<void> {
+    const deviceId = req.get("User-Agent");
+    try {
+      const data = await this.authService.login(body, deviceId);
+      ResponseManager.success(res, {
+        data,
       });
     } catch (err) {
       ResponseManager.handleError(res, err);

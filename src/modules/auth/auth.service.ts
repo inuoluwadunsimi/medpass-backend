@@ -18,6 +18,7 @@ import { EmailService } from "../mail/mail.service";
 import { JwtHelper } from "./jwt/jwt.helper";
 import { JwtType } from "./jwt/jwt.interface";
 import { AuthResponse } from "./interfaces/auth.responses";
+import { LoginDto } from "./dtos/login.dto";
 
 @Injectable()
 export class AuthService {
@@ -115,5 +116,32 @@ export class AuthService {
       otpType: OtpType.SIGN_UP,
     });
     await this.emailService.sendOtpMail(email, otp, user.firstName);
+  }
+
+  public async login(body: LoginDto, deviceId: string): Promise<AuthResponse> {
+    const { email, password } = body;
+    const userAuth = await this.userAuthModel
+      .findOne<UserAuthDocument>({
+        email,
+      })
+      .populate("user");
+    if (!userAuth) {
+      throw new NotFoundException("invalid login details");
+    }
+    const isEqual = await bcrypt.compare(password, userAuth.password);
+    if (!isEqual) {
+      throw new NotFoundException("invalid login details");
+    }
+
+    const user = userAuth.user as UserDocument;
+    const response = await this.userService.saveUserToken({
+      email: body.email,
+      userId: user.id,
+      type: user.role === UserRole.ADMIN ? JwtType.ADMIN : JwtType.USER,
+      deviceId,
+      role: user.role,
+      user,
+    });
+    return response;
   }
 }
