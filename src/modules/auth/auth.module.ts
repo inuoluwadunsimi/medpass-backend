@@ -11,6 +11,12 @@ import {
   OtpSchema,
 } from "../user/schemas";
 import { UserModule } from "../user/user.module";
+import { AuthController } from "./auth.controller";
+import { UserService } from "../user/user.service";
+import { EmailService } from "../mail/mail.service";
+import { JwtHelper } from "./jwt/jwt.helper";
+import { JwtService } from "@nestjs/jwt";
+import { AuthService } from "./auth.service";
 
 @Module({
   imports: [
@@ -21,5 +27,8 @@ import { UserModule } from "../user/user.module";
     ]),
     UserModule,
   ],
+  controllers: [AuthController],
+  providers: [UserService, EmailService, JwtHelper, JwtService, AuthService],
+  exports: [UserService, MongooseModule, AuthService],
 })
 export class AuthModule {}

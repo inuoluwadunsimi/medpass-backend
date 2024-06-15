@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { EmailInterface } from "./mail.interface";
-import path from "node:path";
+import * as path from "node:path";
 import fs from "fs";
 const templateDir = path.join(__dirname, "templates");
 
