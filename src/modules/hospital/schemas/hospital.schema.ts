@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document } from "mongoose";
+import { User, UserDocument } from "../../user/schemas";
 
 @Schema({
   timestamps: true,
@@ -73,6 +74,13 @@ export class Hospital {
     default: false,
   })
   kycVerified: boolean;
+
+  @ApiProperty()
+  @Prop({
+    type: String,
+    ref: User.name,
+  })
+  created_by: string | UserDocument;
 }
 
 export type HospitalDocument = Hospital & Document;
