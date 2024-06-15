@@ -11,6 +11,7 @@ import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { HospitalModule } from "./modules/hospital/hospital.module";
 import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
+import { KycModule } from "./modules/kyc/kyc.module";
 dotenv.config();
 
 @Module({
@@ -20,6 +21,7 @@ dotenv.config();
     AuthModule,
     HospitalModule,
     CloudinaryModule,
+    KycModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
     MailerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({

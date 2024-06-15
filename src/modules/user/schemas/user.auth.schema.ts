@@ -79,7 +79,3 @@ export class UserAuth {
 export type UserAuthDocument = UserAuth & Document;
 
 export const UserAuthSchema = SchemaFactory.createForClass(UserAuth);
-
-// this does some transformation on the schema so that when you fetch from db, you can access id as
-//  .id instead of ._id, this only works  after getting data from db though, find quries and update queires
-// still have to be done using ._id
