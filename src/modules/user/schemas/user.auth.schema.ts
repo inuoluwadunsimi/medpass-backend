@@ -6,12 +6,6 @@ import { v4 as uuidv4 } from "uuid";
 import { Document } from "mongoose";
 import { User, UserDocument } from "./user.schema";
 
-export enum AuthType {
-  EMAIL = "email",
-  GOOGLE = "google",
-  FACEBOOK = "facebook",
-}
-
 @Schema({
   timestamps: true,
   versionKey: false,
@@ -72,14 +66,6 @@ export class UserAuth {
     },
   ])
   recognisedDevices: string[];
-
-  @ApiProperty()
-  @Prop({
-    type: String,
-    enum: Object.values(AuthType),
-    default: AuthType.EMAIL,
-  })
-  authType: string;
 
   // the isverified is to confirm if a user has done OTP verification
   @ApiProperty()
