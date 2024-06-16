@@ -3,11 +3,15 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { EmailInterface } from "./mail.interface";
 import * as path from "node:path";
 import fs from "fs";
+import { ConfigService } from "@nestjs/config";
 const templateDir = path.join(__dirname, "templates");
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly configService: ConfigService
+  ) {}
 
   private async sendMail(body: EmailInterface) {
     try {
@@ -30,6 +34,26 @@ export class EmailService {
     await this.sendMail({
       to: email,
       subject: "OTP for registration",
+      html: html,
+    });
+  }
+
+  public async sendInviteEmail(
+    email: string,
+    name: string,
+    token: string
+  ): Promise<void> {
+    const templatePath = path.join(templateDir, "invite.email.html");
+    const templateSource = fs.readFileSync(templatePath, "utf8");
+    const html = templateSource
+      .replace(/{{name}}/g, name)
+      .replace(
+        /{{verificatonLink}}/g,
+        `${this.configService.get<string>("FRONTEND_URL")}/auth/invite/${token}`
+      );
+    await this.sendMail({
+      to: email,
+      subject: "MEDPASS INVITATION",
       html: html,
     });
   }
