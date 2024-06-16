@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
-export class CreateDeartment {
+export class CreateDepartment {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({ example: "surgery" })

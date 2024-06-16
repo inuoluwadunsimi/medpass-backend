@@ -6,6 +6,10 @@ import { User, UserSchema } from "../user/schemas";
 import { UserModule } from "../user/user.module";
 import { HospitalModule } from "../hospital/hospital.module";
 import { Department, DepartmentSchema } from "./schema/department.schema";
+import { DepartmentController } from "./department.controller";
+import { DepartmentService } from "./department.service";
+import { JwtHelper } from "../auth/jwt/jwt.helper";
+import { JwtService } from "@nestjs/jwt";
 
 @Module({
   imports: [
@@ -18,5 +22,8 @@ import { Department, DepartmentSchema } from "./schema/department.schema";
     UserModule,
     HospitalModule,
   ],
+  controllers: [DepartmentController],
+  providers: [DepartmentService, JwtHelper, JwtService],
+  exports: [DepartmentService, MongooseModule],
 })
 export class DepartmentModule {}
