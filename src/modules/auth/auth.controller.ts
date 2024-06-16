@@ -11,24 +11,36 @@ import {
   Req,
   Res,
   UploadedFile,
+  UseInterceptors,
   UseGuards,
+  UploadedFiles,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
 import { AuthResponse } from "./interfaces/auth.responses";
 
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
 import { SignupDto, VerifyOtp } from "./dtos/signup.dto";
 import { Request, Response } from "express";
 import { LoginDto } from "./dtos/login.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { memoryStorage } from "multer";
+import { IExpressRequest } from "./jwt/jwt.interface";
+import { KycService } from "../kyc/kyc.service";
 
 @Controller("auth")
 @ApiTags("auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private kycService: KycService
   ) {}
 
   @Post("admin/register")
@@ -79,6 +91,33 @@ export class AuthController {
       ResponseManager.success(res, {
         message: "Registered Successfully",
         data,
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Post("/user/kyc")
+  @ApiOperation({
+    summary: "kyc upload for doctor",
+  })
+  @ApiConsumes("multipart/form-data")
+  @ApiResponse({
+    status: 201,
+    description: "KYC verified",
+    type: AuthResponse,
+  })
+  @UseInterceptors(FileInterceptor("kycFile", { storage: memoryStorage() }))
+  public async uploadDoctorKyc(
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response,
+    @Req() req: IExpressRequest
+  ) {
+    const user = req.userId;
+    try {
+      await this.kycService.uploadDoctorKycDocument({ user, file });
+      ResponseManager.success(res, {
+        message: "KYC verified",
       });
     } catch (err) {
       ResponseManager.handleError(res, err);
