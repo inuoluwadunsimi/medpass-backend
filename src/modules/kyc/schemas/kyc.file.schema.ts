@@ -9,7 +9,7 @@ export class KYCFile {
 
   @ApiProperty()
   @Prop({ type: String })
-  publicId: string;
+  public_idd: string;
 }
 
 export const KYCFileSchema = SchemaFactory.createForClass(KYCFile);

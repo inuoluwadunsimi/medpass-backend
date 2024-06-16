@@ -12,9 +12,11 @@ import {
   Res,
   UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
+import { memoryStorage } from "multer";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiConsumes, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { HospitalService } from "./hospital.service";
 import { Request, Response } from "express";
 import { CreateHospitalDto } from "./dtos/create-hospital.dto";
@@ -24,12 +26,18 @@ import { UserRole } from "../user/interfaces/user.enums";
 import { Roles } from "../../decorators/roles.decorator";
 import { Hospital } from "./schemas/hospital.schema";
 import { IExpressRequest } from "../auth/jwt/jwt.interface";
+import { KycEnums } from "../kyc/enums/kyc.enums";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { KycService } from "../kyc/kyc.service";
 
 @Controller("hospital")
 @ApiTags("hospital")
 @UseGuards(AppAuthGuard)
 export class HospitalController {
-  constructor(private readonly hospitalService: HospitalService) {}
+  constructor(
+    private readonly hospitalService: HospitalService,
+    private readonly kycService: KycService
+  ) {}
 
   @Post()
   @UseGuards(RolesGuard)
@@ -45,6 +53,28 @@ export class HospitalController {
       const data = await this.hospitalService.createHospital(body, user);
       ResponseManager.success(res, { data });
     } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Post("/kyc/:hospitalId")
+  @UseInterceptors(FileInterceptor("kycFile", { storage: memoryStorage() }))
+  @ApiResponse({ status: 200, description: "kyc document uploaded" })
+  @ApiConsumes("multipart/form-data")
+  public async kycUpload(
+    @Param() hospitalId: string,
+    @Body() kycType: KycEnums,
+    @Res() res: Response,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    try {
+      await this.kycService.UploadKycDocument({
+        hospitalId,
+        kycType,
+        file,
+      });
+      ResponseManager.success(res, { message: "kyc document uploaded" });
+    } catch (err) {
       ResponseManager.handleError(res, err);
     }
   }
