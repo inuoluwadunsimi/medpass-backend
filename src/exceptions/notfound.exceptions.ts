@@ -4,7 +4,7 @@ import {
   NotFoundException,
   HttpException,
   ArgumentsHost,
-} from '@nestjs/common';
+} from "@nestjs/common";
 
 @Catch(NotFoundException)
 export class NotFoundExceptionFilter implements ExceptionFilter {
@@ -16,7 +16,7 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
       statusCode: 404,
       timestamp: new Date().toISOString(),
       path: ctx.getRequest().url,
-      message: 'Resource not found',
+      message: "Resource not found",
     });
   }
 }
