@@ -1,14 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { KYCFile, KYCFileSchema } from "./kyc.file.schema";
 import { v4 as uuidv4 } from "uuid";
 import {
   Hospital,
   HospitalDocument,
 } from "../../hospital/schemas/hospital.schema";
-import { User, UserDocument } from "../../user/schemas";
 import { Document } from "mongoose";
-import { KycEnums } from "../enums/kyc.enums";
 
 @Schema({
   timestamps: true,
@@ -28,7 +25,7 @@ import { KycEnums } from "../enums/kyc.enums";
     },
   },
 })
-export class KYC {
+export class Department {
   @ApiProperty()
   @Prop({
     required: true,
@@ -43,33 +40,31 @@ export class KYC {
   @Prop({
     type: String,
     ref: Hospital.name,
+    required: true,
   })
   hospital: HospitalDocument | string;
 
   @ApiProperty()
   @Prop({
     type: String,
-    ref: User.name,
+    required: true,
   })
-  user: UserDocument | string;
-
-  @ApiProperty()
-  @Prop({
-    type: KYCFileSchema,
-  })
-  file: KYCFile;
+  departmentName: string;
 
   @ApiProperty()
   @Prop({
     type: String,
-    enum: Object.values(KycEnums),
+    required: false,
   })
-  kycType: KycEnums;
+  departmentEmail: string;
 
   @ApiProperty()
-  @Prop({ type: Boolean, default: true })
-  uploaded: boolean;
+  @Prop({
+    type: String,
+    required: true,
+  })
+  description: string;
 }
 
-export type KYCDocument = KYC & Document;
-export const KYCSchema = SchemaFactory.createForClass(KYC);
+export type DepartmentDocument = Department & Document;
+export const DepartmentSchema = SchemaFactory.createForClass(Department);

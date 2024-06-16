@@ -12,6 +12,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { HospitalModule } from "./modules/hospital/hospital.module";
 import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 import { KycModule } from "./modules/kyc/kyc.module";
+import { DepartmentModule } from "./modules/department/department.module";
 dotenv.config();
 
 @Module({
@@ -20,6 +21,7 @@ dotenv.config();
     UserModule,
     AuthModule,
     HospitalModule,
+    DepartmentModule,
     CloudinaryModule,
     KycModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ".env" }),
