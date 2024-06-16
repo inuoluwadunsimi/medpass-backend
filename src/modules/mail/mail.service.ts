@@ -40,13 +40,13 @@ export class EmailService {
 
   public async sendInviteEmail(
     email: string,
-    name: string,
+    hospitalName: string,
     token: string
   ): Promise<void> {
     const templatePath = path.join(templateDir, "invite.email.html");
     const templateSource = fs.readFileSync(templatePath, "utf8");
     const html = templateSource
-      .replace(/{{name}}/g, name)
+      .replace(/{{name}}/g, hospitalName)
       .replace(
         /{{verificatonLink}}/g,
         `${this.configService.get<string>("FRONTEND_URL")}/auth/invite/${token}`
