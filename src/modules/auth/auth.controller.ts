@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Patch,
   Post,
+  Query,
   Req,
   Res,
   UploadedFile,
@@ -15,7 +16,7 @@ import {
 import * as ResponseManager from "../../helpers/response.helpers";
 import { AuthResponse } from "./interfaces/auth.responses";
 
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
 import { SignupDto, VerifyOtp } from "./dtos/signup.dto";
@@ -44,6 +45,37 @@ export class AuthController {
     const deviceId = req.get("User-Agent");
     try {
       const data = await this.authService.ownerRegister(body, deviceId);
+      ResponseManager.success(res, {
+        message: "Registered Successfully",
+        data,
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @ApiOperation({
+    summary: "registers doctors and department heads",
+  })
+  @Post("signup")
+  @ApiResponse({
+    status: 201,
+    description: "Registered Successfully",
+    type: AuthResponse,
+  })
+  public async doctorRegister(
+    @Body() body: SignupDto,
+    @Req() req: Request,
+    @Res() res: Response,
+    @Query("token") token: string
+  ): Promise<void> {
+    const deviceId = req.get("User-Agent");
+    try {
+      const data = await this.authService.doctorRegister({
+        body,
+        token,
+        deviceId,
+      });
       ResponseManager.success(res, {
         message: "Registered Successfully",
         data,

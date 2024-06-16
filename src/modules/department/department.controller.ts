@@ -34,7 +34,10 @@ export class DepartmentController {
     @Res() res: any
   ): Promise<void> {
     try {
-      const data = this.departmentService.createDepartment(hospitalId, body);
+      const data = await this.departmentService.createDepartment(
+        hospitalId,
+        body
+      );
       ResponseManager.success(res, {
         data,
       });

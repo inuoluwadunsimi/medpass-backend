@@ -17,6 +17,7 @@ import { EmailService } from "../mail/mail.service";
 import { JwtHelper } from "./jwt/jwt.helper";
 import { JwtService } from "@nestjs/jwt";
 import { AuthService } from "./auth.service";
+import { Doctor, DoctorSchema } from "../department/schema/doctor.schema";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthService } from "./auth.service";
       { name: User.name, schema: UserSchema },
       { name: UserAuth.name, schema: UserAuthSchema },
       { name: Otp.name, schema: OtpSchema },
+      { name: Doctor.name, schema: DoctorSchema },
     ]),
     UserModule,
   ],

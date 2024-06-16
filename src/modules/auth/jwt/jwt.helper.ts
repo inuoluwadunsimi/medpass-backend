@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
-import { JwtType, GenerateTokenParam } from "./jwt.interface";
+import { GenerateTokenParam, JwtType } from "./jwt.interface";
 import { ConfigService } from "@nestjs/config";
 import { UserToken, UserTokenDocument } from "../../user/schemas";
 
@@ -33,6 +33,14 @@ export class JwtHelper {
         expiresIn = 21600; // 6 hours
         break;
 
+      case JwtType.HOD:
+        expiresIn = 21600; // 6 hours
+        break;
+
+      case JwtType.DOCTOR:
+        expiresIn = 21600; // 6 hours
+        break;
+
       case JwtType.PASSWORD_RESET:
         expiresIn = 1800; // 30 minutes
         break;
@@ -43,5 +51,9 @@ export class JwtHelper {
     const accessToken = this.jwtService.sign(payload, { expiresIn });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: 2592000 });
     return { accessToken, refreshToken };
+  }
+
+  public verifyToken(token: string): GenerateTokenParam {
+    return this.jwtService.verify(token) as GenerateTokenParam;
   }
 }
