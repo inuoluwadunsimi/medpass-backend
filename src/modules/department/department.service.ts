@@ -10,6 +10,7 @@ import { Doctor, DoctorDocument } from "./schema/doctor.schema";
 import { CreateDepartment } from "./dtos/create.department.dto";
 import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { JwtType } from "../auth/jwt/jwt.interface";
+import { EmailService } from "../mail/mail.service";
 
 @Injectable()
 export class DepartmentService {
@@ -18,7 +19,8 @@ export class DepartmentService {
     private departmentModel: Model<DepartmentDocument>,
     @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>,
     @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
-    private jwtHelper: JwtHelper
+    private jwtHelper: JwtHelper,
+    private readonly emailService: EmailService
   ) {}
 
   public async createDepartment(hospitalId: string, body: CreateDepartment) {
@@ -41,6 +43,12 @@ export class DepartmentService {
       hospital: hospitalId,
       department: department.id,
     });
+
+    await this.emailService.sendInviteEmail(
+      body.hodEmail,
+      hospital.name,
+      token.accessToken
+    );
 
     return department;
   }

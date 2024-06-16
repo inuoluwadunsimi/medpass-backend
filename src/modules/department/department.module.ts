@@ -10,6 +10,7 @@ import { DepartmentController } from "./department.controller";
 import { DepartmentService } from "./department.service";
 import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { JwtService } from "@nestjs/jwt";
+import { EmailService } from "../mail/mail.service";
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { JwtService } from "@nestjs/jwt";
     HospitalModule,
   ],
   controllers: [DepartmentController],
-  providers: [DepartmentService, JwtHelper, JwtService],
+  providers: [DepartmentService, JwtHelper, JwtService, EmailService],
   exports: [DepartmentService, MongooseModule],
 })
 export class DepartmentModule {}
