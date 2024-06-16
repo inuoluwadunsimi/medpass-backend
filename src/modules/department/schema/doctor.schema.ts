@@ -57,6 +57,12 @@ export class Doctor {
     ref: Department.name,
   })
   department: DepartmentDocument | string;
+
+  @ApiProperty()
+  @Prop({
+    type: Boolean,
+  })
+  kycVerified: boolean;
 }
 
 export type DoctorDocument = Doctor & Document;

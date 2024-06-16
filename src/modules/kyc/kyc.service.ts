@@ -4,18 +4,20 @@ import { KYC, KYCDocument } from "./schemas/kyc.schema";
 import { Model } from "mongoose";
 
 import { CloudinaryService } from "../cloudinary/cloudinary.service";
-import { uploadKyc } from "./interfaces";
+import { uploadDoctorKyc, uploadKyc } from "./interfaces";
 import { KycEnums } from "./enums/kyc.enums";
 import {
   Hospital,
   HospitalDocument,
 } from "../hospital/schemas/hospital.schema";
+import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
 
 @Injectable()
 export class KycService {
   constructor(
     @InjectModel(KYC.name) private KYCModel: Model<KYCDocument>,
     @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>,
+    @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
     private readonly cloudinaryService: CloudinaryService
   ) {}
   public async UploadHospitalKYCDocument(body: uploadKyc): Promise<void> {
@@ -38,6 +40,19 @@ export class KycService {
       {
         kycVerified: true,
       }
+    );
+  }
+
+  public async uploadDoctorKycDocument(body: uploadDoctorKyc): Promise<void> {
+    const uploadedResult = this.cloudinaryService.uploadImage(body.file);
+    await this.KYCModel.create({
+      kycType: KycEnums.MEDICAL_LICENSE,
+      file: uploadedResult,
+      user: body.user,
+    });
+    await this.doctorModel.updateOne(
+      { user: body.user },
+      { kycVerified: true }
     );
   }
 }

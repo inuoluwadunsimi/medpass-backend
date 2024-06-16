@@ -5,3 +5,8 @@ export interface uploadKyc {
   files: Express.Multer.File[];
   kycType: KycEnums[];
 }
+
+export interface uploadDoctorKyc {
+  user: string;
+  file: Express.Multer.File;
+}
