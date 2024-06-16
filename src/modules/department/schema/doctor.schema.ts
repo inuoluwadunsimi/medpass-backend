@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { v4 as uuidv4 } from "uuid";
+import { Document } from "mongoose";
 import {
   Hospital,
   HospitalDocument,
 } from "../../hospital/schemas/hospital.schema";
-import { Document } from "mongoose";
-import { Doctor, DoctorDocument } from "./doctor.schema";
-import { forwardRef } from "@nestjs/common";
+import { User, UserDocument } from "../../user/schemas";
+import { Department, DepartmentDocument } from "./department.schema";
 
 @Schema({
   timestamps: true,
@@ -20,21 +20,19 @@ import { forwardRef } from "@nestjs/common";
     },
   },
   toObject: {
-    transform(ret) {
+    transform(doc, ret) {
       ret.id = ret._id;
       delete ret._id;
       return ret;
     },
   },
 })
-export class Department {
+export class Doctor {
   @ApiProperty()
   @Prop({
     required: true,
     type: String,
-    default: function genUUID() {
-      return uuidv4();
-    },
+    default: uuidv4,
   })
   _id: string;
 
@@ -49,31 +47,17 @@ export class Department {
   @ApiProperty()
   @Prop({
     type: String,
-    ref: "Doctor",
+    ref: User.name,
   })
-  departmentHead: DoctorDocument | string;
+  user: UserDocument | string;
 
   @ApiProperty()
   @Prop({
     type: String,
-    required: true,
+    ref: Department.name,
   })
-  departmentName: string;
-
-  @ApiProperty()
-  @Prop({
-    type: String,
-    required: false,
-  })
-  departmentEmail: string;
-
-  @ApiProperty()
-  @Prop({
-    type: String,
-    required: true,
-  })
-  description: string;
+  department: DepartmentDocument | string;
 }
 
-export type DepartmentDocument = Department & Document;
-export const DepartmentSchema = SchemaFactory.createForClass(Department);
+export type DoctorDocument = Doctor & Document;
+export const DoctorSchema = SchemaFactory.createForClass(Doctor);
