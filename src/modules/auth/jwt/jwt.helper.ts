@@ -28,15 +28,11 @@ export class JwtHelper {
       case JwtType.USER:
         expiresIn = 2592000; // 30 days
         break;
-      case JwtType.NEW_USER:
-        expiresIn = 2592000; // 30 days
-        break;
+
       case JwtType.ADMIN:
         expiresIn = 21600; // 6 hours
         break;
-      case JwtType.VERIFICATION:
-        expiresIn = 1800; // 30 minutes
-        break;
+
       case JwtType.PASSWORD_RESET:
         expiresIn = 1800; // 30 minutes
         break;

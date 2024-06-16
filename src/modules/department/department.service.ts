@@ -9,6 +9,7 @@ import {
 import { Doctor, DoctorDocument } from "./schema/doctor.schema";
 import { CreateDepartment } from "./dtos/create.department.dto";
 import { JwtHelper } from "../auth/jwt/jwt.helper";
+import { JwtType } from "../auth/jwt/jwt.interface";
 
 @Injectable()
 export class DepartmentService {
@@ -34,6 +35,27 @@ export class DepartmentService {
       description: body.description,
     });
 
+    const token = this.jwtHelper.generateToken({
+      email: body.hodEmail,
+      type: JwtType.HOD,
+      hospital: hospitalId,
+      department: department.id,
+    });
+
+    return department;
+  }
+
+  public async getDepartments(hospitalId: string) {
+    return this.departmentModel.find({ hospital: hospitalId });
+  }
+
+  public async getDepartment(departmentId: string) {
+    const department = await this.departmentModel.findOne<DepartmentDocument>({
+      _id: departmentId,
+    });
+    if (!department) {
+      throw new NotFoundException("Department not found");
+    }
     return department;
   }
 }
