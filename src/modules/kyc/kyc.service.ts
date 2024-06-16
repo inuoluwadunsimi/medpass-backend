@@ -18,40 +18,26 @@ export class KycService {
     @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>,
     private readonly cloudinaryService: CloudinaryService
   ) {}
-  public async UploadKycDocument(body: uploadKyc): Promise<void> {
-    const { hospitalId, file, kycType } = body;
-    if (kycType === KycEnums.MEDICAL_LICENSE) {
-      // logic for them
+  public async UploadHospitalKYCDocument(body: uploadKyc): Promise<void> {
+    const { hospitalId, files, kycType } = body;
+    const uploadResults = await Promise.all(
+      files.map((file) => this.cloudinaryService.uploadImage(file))
+    );
+
+    for (let i = 0; i < files.length; i++) {
+      const uploadedResult = uploadResults[i];
+      await this.KYCModel.create({
+        kycType: kycType[i],
+        file: uploadedResult,
+        hospital: hospitalId,
+      });
     }
 
-    const kycExists = await this.KYCModel.findOne({
-      hospital: hospitalId,
-      kycType: kycType,
-    });
-    if (kycExists) {
-      throw new BadRequestException("document already uploaded");
-    }
-
-    const uploadedResult = this.cloudinaryService.uploadImage(file);
-    await this.KYCModel.create({
-      file: uploadedResult,
-      kycType: kycType,
-      uploaded: true,
-      hospital: hospitalId,
-    });
-
-    const kycDetails = await this.KYCModel.find({
-      hospital: hospitalId,
-    }).countDocuments();
-    if (kycDetails > 2) {
-      await this.hospitalModel.updateOne(
-        { _id: hospitalId },
-        {
-          kycVerified: true,
-        }
-      );
-    }
-
-    // do logic for doctor
+    await this.hospitalModel.updateOne(
+      { _id: hospitalId },
+      {
+        kycVerified: true,
+      }
+    );
   }
 }

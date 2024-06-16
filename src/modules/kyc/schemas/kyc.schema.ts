@@ -56,7 +56,7 @@ export class KYC {
   kycType: KycEnums;
 
   @ApiProperty()
-  @Prop({ type: Boolean })
+  @Prop({ type: Boolean, default: true })
   uploaded: boolean;
 }
 
