@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import helmet from "helmet";
+import * as cookieParser from "cookie-parser";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import {
   ValidationError,
@@ -31,6 +32,8 @@ async function bootstrap() {
         new ValidationExceptions(errors),
     })
   );
+
+  app.use(cookieParser());
 
   app.useGlobalFilters(new NotFoundExceptionFilter());
 

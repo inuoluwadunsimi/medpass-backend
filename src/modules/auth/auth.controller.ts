@@ -88,6 +88,12 @@ export class AuthController {
         token,
         deviceId,
       });
+      res.cookie("x-auth-token", data.accessToken, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        maxAge: 5184000,
+      });
       ResponseManager.success(res, {
         message: "Registered Successfully",
         data,
@@ -116,6 +122,7 @@ export class AuthController {
     const user = req.userId;
     try {
       await this.kycService.uploadDoctorKycDocument({ user, file });
+
       ResponseManager.success(res, {
         message: "KYC verified",
       });
@@ -137,6 +144,12 @@ export class AuthController {
     const deviceId = req.get("User-Agent");
     try {
       const data = await this.authService.verifyOtp(body, deviceId);
+      res.cookie("x-auth-token", data.accessToken, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        maxAge: 5184000,
+      });
       ResponseManager.success(res, {
         data,
       });
