@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { v4 as uuidv4 } from "uuid";
-import { User, UserDocument } from "../../user/schemas";
 import { Patient, PatientDocument } from "./patient.schema";
 import { Doctor, DoctorDocument } from "../../department/schema/doctor.schema";
 import {
