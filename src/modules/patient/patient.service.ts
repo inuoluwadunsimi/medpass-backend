@@ -129,4 +129,14 @@ export class PatientService {
     }
     return record;
   }
+
+  public async getRecord(recordId: string): Promise<AppointmentDocument> {
+    const record = await this.appointmentModel.findOne<AppointmentDocument>({
+      _id: recordId,
+    });
+    if (!record) {
+      throw new NotFoundException("Record not found");
+    }
+    return record;
+  }
 }

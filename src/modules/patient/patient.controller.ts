@@ -78,6 +78,17 @@ export class PatientController {
     }
   }
 
+  @Get("/record/:recordId")
+  @ApiResponse({ status: 200, type: Appointment })
+  public async getRecord(@Res() res, @Param() recordId: string): Promise<void> {
+    try {
+      const data = await this.patientService.getRecord(recordId);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @Get("/search")
   @ApiResponse({ status: 200, type: [Patient] })
   public async searchPatientById(
