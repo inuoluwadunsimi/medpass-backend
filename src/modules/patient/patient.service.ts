@@ -26,10 +26,14 @@ export class PatientService {
     return this.generatePatientId();
   }
 
-  public async getPatientById(patientId: string): Promise<PatientDocument[]> {
-    const results = await this.patientModel.find<PatientDocument>({
-      $text: { $search: patientId },
-    });
+  public async searchPatientById(
+    patientId: string
+  ): Promise<PatientDocument[]> {
+    const results = await this.patientModel
+      .find<PatientDocument>({
+        $text: { $search: patientId },
+      })
+      .populate("user");
     return results;
   }
 

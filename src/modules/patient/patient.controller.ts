@@ -30,13 +30,23 @@ export class PatientController {
   @Post()
   @ApiResponse({ status: 201, description: "Patient created successfully" })
   @ApiResponse({ status: 201, type: Patient })
-  public async createPatient(
-    @Req() req,
-    @Res() res,
-    @Body() body
-  ): Promise<void> {
+  public async createPatient(@Res() res, @Body() body): Promise<void> {
     try {
       const data = await this.patientService.createPatient(body);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Get("/search")
+  @ApiResponse({ status: 200, type: [Patient] })
+  public async searchPatientById(
+    @Res() res,
+    @Query() patientId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.searchPatientById(patientId);
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);
