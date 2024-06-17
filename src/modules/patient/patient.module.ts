@@ -12,6 +12,8 @@ import {
 } from "./schemas/appointment.schema";
 import { PatientController } from "./patient.controller";
 import { PatientService } from "./patient.service";
+import { User, UserSchema } from "../user/schemas";
+import { JwtService } from "@nestjs/jwt";
 
 @Module({
   imports: [
@@ -21,10 +23,11 @@ import { PatientService } from "./patient.service";
       { name: Prescription.name, schema: PrescriptionSchema },
       { name: Appointment.name, schema: AppointmentSchema },
       { name: Treatment.name, schema: TreatmentSchema },
+      { name: User.name, schema: UserSchema },
     ]),
   ],
   controllers: [PatientController],
-  providers: [PatientService],
+  providers: [PatientService, JwtService],
   exports: [PatientService],
 })
 export class PatientModule {}
