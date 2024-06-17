@@ -14,6 +14,7 @@ import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 import { KycModule } from "./modules/kyc/kyc.module";
 import { DepartmentModule } from "./modules/department/department.module";
 import { PatientModule } from "./modules/patient/patient.module";
+import { NotificationModule } from "./modules/notification/notification.module";
 dotenv.config();
 
 @Module({
@@ -22,6 +23,7 @@ dotenv.config();
     UserModule,
     PatientModule,
     AuthModule,
+    NotificationModule,
     HospitalModule,
     DepartmentModule,
     CloudinaryModule,
