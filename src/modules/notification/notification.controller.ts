@@ -16,6 +16,7 @@ import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { NotificationService } from "./notification.service";
 import { Response } from "express";
 import { IExpressRequest } from "../auth/jwt/jwt.interface";
+import { Notification } from "./schema/notification.schema";
 
 @Controller("notification")
 @ApiTags("notification")

@@ -24,6 +24,7 @@ import {
 import { IExpressRequest } from "../auth/jwt/jwt.interface";
 import { Appointment } from "./schemas/appointment.schema";
 import { RecordQuery } from "./interfaces";
+import { CreatePatientDto } from "./dtos/create.patient.dto";
 
 @Controller("patient")
 @ApiTags("patient")
@@ -34,7 +35,10 @@ export class PatientController {
   @Post()
   @ApiResponse({ status: 201, description: "Patient created successfully" })
   @ApiResponse({ status: 201, type: Patient })
-  public async createPatient(@Res() res, @Body() body): Promise<void> {
+  public async createPatient(
+    @Res() res,
+    @Body() body: CreatePatientDto
+  ): Promise<void> {
     try {
       const data = await this.patientService.createPatient(body);
       ResponseManager.success(res, { data });

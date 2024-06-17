@@ -5,6 +5,7 @@ import { NotificationSchema, Notification } from "./schema/notification.schema";
 import { User, UserSchema } from "../user/schemas";
 import { NotificationService } from "./notification.service";
 import { NotificationController } from "./notification.controller";
+import { JwtService } from "@nestjs/jwt";
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { NotificationController } from "./notification.controller";
     ]),
   ],
   controllers: [NotificationController],
-  providers: [NotificationService],
+  providers: [NotificationService, JwtService],
   exports: [NotificationService],
 })
 export class NotificationModule {}
