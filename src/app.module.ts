@@ -13,12 +13,14 @@ import { HospitalModule } from "./modules/hospital/hospital.module";
 import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 import { KycModule } from "./modules/kyc/kyc.module";
 import { DepartmentModule } from "./modules/department/department.module";
+import { PatientModule } from "./modules/patient/patient.module";
 dotenv.config();
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGODB_URI),
     UserModule,
+    PatientModule,
     AuthModule,
     HospitalModule,
     DepartmentModule,
