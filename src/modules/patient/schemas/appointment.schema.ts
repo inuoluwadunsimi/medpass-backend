@@ -13,6 +13,38 @@ import {
   DepartmentDocument,
 } from "../../department/schema/department.schema";
 
+@Schema({ _id: false })
+export class Prescription {
+  @ApiProperty()
+  @Prop({ type: String })
+  name: string;
+
+  @ApiProperty()
+  @Prop({ type: String })
+  mg: string;
+
+  @ApiProperty()
+  @Prop({ type: String })
+  measurement: string;
+
+  @ApiProperty()
+  @Prop({ type: String })
+  frequency: string;
+}
+export const PrescriptionSchema = SchemaFactory.createForClass(Prescription);
+
+export class Treatment {
+  @ApiProperty()
+  @Prop({ type: String })
+  name: string;
+
+  @ApiProperty()
+  @Prop({ type: String })
+  description: string;
+}
+
+export const TreatmentSchema = SchemaFactory.createForClass(Treatment);
+
 @Schema({
   timestamps: true,
   versionKey: false,
@@ -88,6 +120,25 @@ export class Appointment {
     type: [String],
   })
   complaint: String[];
+
+  @ApiProperty()
+  @Prop({
+    required: true,
+    type: [String],
+  })
+  doctorsReport: String[];
+
+  @ApiProperty()
+  @Prop({
+    type: [Prescription],
+  })
+  prescription: Prescription[];
+
+  @ApiProperty()
+  @Prop({
+    type: [Treatment],
+  })
+  treatment: Treatment[];
 }
 
 export type AppointmentDocument = Appointment & Document;

@@ -20,4 +20,6 @@ import { ApiTags } from "@nestjs/swagger";
 
 @Controller("patient")
 @ApiTags("patient")
-export class PatientController {}
+export class PatientController {
+  constructor() {}
+}
