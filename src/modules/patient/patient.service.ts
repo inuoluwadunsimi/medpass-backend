@@ -7,12 +7,18 @@ import { CreatePatientDto } from "./dtos/create.patient.dto";
 import { User, UserDocument } from "../user/schemas";
 import { UserRole } from "../user/interfaces/user.enums";
 import { CreateBioData } from "./dtos/create.biodata";
+import { CreateAppointmentDto } from "./dtos/create.appointment.dto";
+import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
+import { Appointment, AppointmentDocument } from "./schemas/appointment.schema";
 
 @Injectable()
 export class PatientService {
   constructor(
     @InjectModel(Patient.name) private patientModel: Model<PatientDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
+    @InjectModel(Appointment.name)
+    private appointmentModel: Model<AppointmentDocument>
   ) {}
 
   public async generatePatientId(): Promise<string> {
@@ -79,5 +85,28 @@ export class PatientService {
       throw new NotFoundException("Patient not found");
     }
     return patient;
+  }
+
+  public async createRecord(
+    body: CreateAppointmentDto,
+    patientId: string,
+    user: string
+  ): Promise<AppointmentDocument> {
+    const doctor = await this.doctorModel.findOne<DoctorDocument>({
+      user: user,
+    });
+
+    if (!doctor) {
+      throw new NotFoundException("Doctor not found");
+    }
+
+    const record = await this.appointmentModel.create({
+      doctor: doctor.id,
+      hospital: doctor.hospital,
+      department: doctor.department,
+      patient: patientId,
+      ...body,
+    });
+    return record;
   }
 }

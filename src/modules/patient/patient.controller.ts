@@ -8,6 +8,7 @@ import {
   UseGuards,
   Param,
   Put,
+  Req,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -16,6 +17,9 @@ import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { Patient } from "./schemas/patient.schema";
 import { Response } from "express";
 import { CreateBioData } from "./dtos/create.biodata";
+import { CreateAppointmentDto } from "./dtos/create.appointment.dto";
+import { IExpressRequest } from "../auth/jwt/jwt.interface";
+import { Appointment } from "./schemas/appointment.schema";
 
 @Controller("patient")
 @ApiTags("patient")
@@ -29,6 +33,27 @@ export class PatientController {
   public async createPatient(@Res() res, @Body() body): Promise<void> {
     try {
       const data = await this.patientService.createPatient(body);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Post("/record/:patientId")
+  @ApiResponse({ status: 200, type: Appointment })
+  public async createRecord(
+    @Res() res,
+    @Req() req: IExpressRequest,
+    @Body() body: CreateAppointmentDto,
+    @Param() patientId: string
+  ): Promise<void> {
+    const user = req.userId;
+    try {
+      const data = await this.patientService.createRecord(
+        body,
+        patientId,
+        user
+      );
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);
@@ -49,20 +74,6 @@ export class PatientController {
     }
   }
 
-  @Get(":patientId")
-  @ApiResponse({ status: 200, type: Patient })
-  public async getPatientById(
-    @Res() res,
-    @Param() patientId: string
-  ): Promise<void> {
-    try {
-      const data = await this.patientService.getPatientById(patientId);
-      ResponseManager.success(res, { data });
-    } catch (err: any) {
-      ResponseManager.handleError(res, err);
-    }
-  }
-
   @Put("biodata/:patientId")
   @ApiResponse({ status: 200, type: Patient })
   public async fillPatientBiodata(
@@ -75,6 +86,20 @@ export class PatientController {
         patientId,
         body
       );
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Get(":patientId")
+  @ApiResponse({ status: 200, type: Patient })
+  public async getPatientById(
+    @Res() res,
+    @Param() patientId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.getPatientById(patientId);
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);
