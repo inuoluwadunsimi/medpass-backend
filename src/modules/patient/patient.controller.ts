@@ -14,6 +14,7 @@ import {
   UseInterceptors,
   UseGuards,
   UploadedFiles,
+  Param,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -47,6 +48,20 @@ export class PatientController {
   ): Promise<void> {
     try {
       const data = await this.patientService.searchPatientById(patientId);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Get(":patientId")
+  @ApiResponse({ status: 200, type: Patient })
+  public async getPatientById(
+    @Res() res,
+    @Param() patientId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.getPatientById(patientId);
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);

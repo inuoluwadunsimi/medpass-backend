@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { isEmpty } from "lodash";
 import { Patient, PatientDocument } from "./schemas/patient.schema";
@@ -50,6 +50,16 @@ export class PatientService {
       patientId,
     });
 
+    return patient;
+  }
+
+  public async getPatientById(patientId: string): Promise<PatientDocument> {
+    const patient = await this.patientModel.findOne<PatientDocument>({
+      _id: patientId,
+    });
+    if (!patient) {
+      throw new NotFoundException("Patient not found");
+    }
     return patient;
   }
 }
