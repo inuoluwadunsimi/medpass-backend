@@ -6,6 +6,7 @@ import { Model } from "mongoose";
 import { CreatePatientDto } from "./dtos/create.patient.dto";
 import { User, UserDocument } from "../user/schemas";
 import { UserRole } from "../user/interfaces/user.enums";
+import { CreateBioData } from "./dtos/create.biodata";
 
 @Injectable()
 export class PatientService {
@@ -57,6 +58,23 @@ export class PatientService {
     const patient = await this.patientModel.findOne<PatientDocument>({
       _id: patientId,
     });
+    if (!patient) {
+      throw new NotFoundException("Patient not found");
+    }
+    return patient;
+  }
+
+  public async fillPatientBiodata(
+    patientId: string,
+    body: CreateBioData
+  ): Promise<PatientDocument> {
+    const patient = await this.patientModel
+      .findOneAndUpdate<PatientDocument>(
+        { _id: patientId },
+        { ...body },
+        { new: true }
+      )
+      .populate("user");
     if (!patient) {
       throw new NotFoundException("Patient not found");
     }
