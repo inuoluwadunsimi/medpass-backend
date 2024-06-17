@@ -7,7 +7,10 @@ import { CreatePatientDto } from "./dtos/create.patient.dto";
 import { User, UserDocument } from "../user/schemas";
 import { UserRole } from "../user/interfaces/user.enums";
 import { CreateBioData } from "./dtos/create.biodata";
-import { CreateAppointmentDto } from "./dtos/create.appointment.dto";
+import {
+  CreateAppointmentDto,
+  UpdateAppointmentDto,
+} from "./dtos/create.appointment.dto";
 import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
 import { Appointment, AppointmentDocument } from "./schemas/appointment.schema";
 
@@ -107,6 +110,23 @@ export class PatientService {
       patient: patientId,
       ...body,
     });
+    return record;
+  }
+
+  public async updateRecord(
+    recordId: string,
+    body: UpdateAppointmentDto
+  ): Promise<AppointmentDocument> {
+    const record =
+      await this.appointmentModel.findOneAndUpdate<AppointmentDocument>(
+        { _id: recordId },
+        { ...body },
+        { new: true }
+      );
+
+    if (!record) {
+      throw new NotFoundException("Record not found");
+    }
     return record;
   }
 }

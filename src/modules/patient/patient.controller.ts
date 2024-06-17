@@ -17,7 +17,10 @@ import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { Patient } from "./schemas/patient.schema";
 import { Response } from "express";
 import { CreateBioData } from "./dtos/create.biodata";
-import { CreateAppointmentDto } from "./dtos/create.appointment.dto";
+import {
+  CreateAppointmentDto,
+  UpdateAppointmentDto,
+} from "./dtos/create.appointment.dto";
 import { IExpressRequest } from "../auth/jwt/jwt.interface";
 import { Appointment } from "./schemas/appointment.schema";
 
@@ -54,6 +57,21 @@ export class PatientController {
         patientId,
         user
       );
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Put("/record/:recordId")
+  @ApiResponse({ status: 200, type: Appointment })
+  public async updateRecord(
+    @Res() res,
+    @Body() body: UpdateAppointmentDto,
+    @Param() recordId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.updateRecord(recordId, body);
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);
