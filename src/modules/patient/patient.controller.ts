@@ -16,11 +16,30 @@ import {
   UploadedFiles,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PatientService } from "./patient.service";
+import { AppAuthGuard } from "../auth/guards/auth.guard";
+import { Patient } from "./schemas/patient.schema";
 
 @Controller("patient")
 @ApiTags("patient")
+@UseGuards(AppAuthGuard)
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
+
+  @Post()
+  @ApiResponse({ status: 201, description: "Patient created successfully" })
+  @ApiResponse({ status: 201, type: Patient })
+  public async createPatient(
+    @Req() req,
+    @Res() res,
+    @Body() body
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.createPatient(body);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
 }
