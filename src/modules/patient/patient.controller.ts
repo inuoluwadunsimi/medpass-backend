@@ -17,9 +17,10 @@ import {
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
 import { ApiTags } from "@nestjs/swagger";
+import { PatientService } from "./patient.service";
 
 @Controller("patient")
 @ApiTags("patient")
 export class PatientController {
-  constructor() {}
+  constructor(private readonly patientService: PatientService) {}
 }

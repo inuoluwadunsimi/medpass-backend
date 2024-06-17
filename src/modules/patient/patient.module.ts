@@ -10,6 +10,8 @@ import {
   Treatment,
   TreatmentSchema,
 } from "./schemas/appointment.schema";
+import { PatientController } from "./patient.controller";
+import { PatientService } from "./patient.service";
 
 @Module({
   imports: [
@@ -21,5 +23,8 @@ import {
       { name: Treatment.name, schema: TreatmentSchema },
     ]),
   ],
+  controllers: [PatientController],
+  providers: [PatientService],
+  exports: [PatientService],
 })
 export class PatientModule {}
