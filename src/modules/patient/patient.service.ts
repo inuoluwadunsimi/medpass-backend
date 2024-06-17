@@ -139,4 +139,27 @@ export class PatientService {
     }
     return record;
   }
+
+  public async getAllRecords(body: {
+    patientId: string;
+    hospitalId?: string;
+    from?: Date;
+    to?: Date;
+  }): Promise<AppointmentDocument[]> {
+    const { patientId, hospitalId, from, to } = body;
+    const filter: any = { patient: patientId };
+    if (hospitalId) {
+      filter.hospital = hospitalId;
+    }
+
+    if (from && to) {
+      filter.date = {
+        $gte: from,
+        $lte: to,
+      };
+    }
+    const records =
+      await this.appointmentModel.find<AppointmentDocument>(filter);
+    return records;
+  }
 }

@@ -11,7 +11,7 @@ import {
   Req,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PatientService } from "./patient.service";
 import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { Patient } from "./schemas/patient.schema";
@@ -23,6 +23,7 @@ import {
 } from "./dtos/create.appointment.dto";
 import { IExpressRequest } from "../auth/jwt/jwt.interface";
 import { Appointment } from "./schemas/appointment.schema";
+import { RecordQuery } from "./interfaces";
 
 @Controller("patient")
 @ApiTags("patient")
@@ -36,6 +37,28 @@ export class PatientController {
   public async createPatient(@Res() res, @Body() body): Promise<void> {
     try {
       const data = await this.patientService.createPatient(body);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Get("/record/:patientId")
+  @ApiResponse({ status: 200, type: [Appointment] })
+  @ApiOperation({
+    summary:
+      " to get patient records for just that hospital, pass the hospitalId in the query",
+  })
+  public async getAllRecords(
+    @Res() res: Response,
+    @Query() query: RecordQuery,
+    @Param() patientId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.getAllRecords({
+        patientId,
+        ...query,
+      });
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);
