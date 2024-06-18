@@ -123,6 +123,14 @@ export class Appointment {
   @ApiProperty()
   @Prop({
     required: true,
+    unique: true,
+    type: String,
+  })
+  record_id: String;
+
+  @ApiProperty()
+  @Prop({
+    required: true,
     type: [String],
   })
   doctorsReport: String[];

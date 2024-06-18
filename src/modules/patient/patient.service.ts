@@ -36,6 +36,18 @@ export class PatientService {
     return this.generatePatientId();
   }
 
+  public async generateRecord(): Promise<string> {
+    const digits = Math.floor(10000000 + Math.random() * 90000000);
+
+    const uniqueId = `PAT-${digits}`;
+    const check = await this.appointmentModel.find({ record_id: uniqueId });
+
+    if (isEmpty(check)) {
+      return uniqueId;
+    }
+    return this.generatePatientId();
+  }
+
   public async searchPatientById(
     patientId: string
   ): Promise<PatientDocument[]> {
@@ -103,11 +115,14 @@ export class PatientService {
       throw new NotFoundException("Doctor not found");
     }
 
+    const record_id = await this.generateRecord();
+
     const record = await this.appointmentModel.create({
       doctor: doctor.id,
       hospital: doctor.hospital,
       department: doctor.department,
       patient: patientId,
+      record_id,
       ...body,
     });
     return record;
