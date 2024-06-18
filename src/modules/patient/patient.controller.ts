@@ -146,6 +146,20 @@ export class PatientController {
     }
   }
 
+  @Get("/record/search")
+  @ApiResponse({ status: 200, type: [Patient] })
+  public async searchByRecordId(
+    @Res() res,
+    @Query() recordId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.searchByRecordId(recordId);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @Put("biodata/:patientId")
   @ApiResponse({ status: 200, type: Patient })
   public async fillPatientBiodata(

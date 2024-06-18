@@ -150,3 +150,4 @@ export class Appointment {
 
 export type AppointmentDocument = Appointment & Document;
 export const AppointmentSchema = SchemaFactory.createForClass(Appointment);
+AppointmentSchema.index({ record_id: "text" });

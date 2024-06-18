@@ -206,4 +206,24 @@ export class PatientService {
       });
     }
   }
+
+  public async searchByRecordId(
+    recordId: string
+  ): Promise<AppointmentDocument[]> {
+    const results = await this.appointmentModel
+      .find<AppointmentDocument>({
+        $text: { $search: recordId },
+      })
+      .populate("department")
+      .populate("hospital")
+      .populate({
+        path: "doctor",
+        populate: "user",
+      })
+      .populate({
+        path: "patient",
+        populate: "user",
+      });
+    return results;
+  }
 }
