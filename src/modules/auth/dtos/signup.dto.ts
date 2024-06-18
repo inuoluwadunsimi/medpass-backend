@@ -20,10 +20,6 @@ export class SignupDto {
 
   @IsNotEmpty()
   @ApiProperty({ example: "" })
-  @Min(8)
-  @Matches(/^.{8,}$/, {
-    message: "Password must be at least 8 characters long.",
-  })
   password: string;
 }
 

@@ -39,8 +39,8 @@ export class UserAuth {
   @ApiProperty()
   @Prop({
     required: true,
-    unique: true,
     type: String,
+    unique: true,
     lowercase: true,
   })
   email: string;

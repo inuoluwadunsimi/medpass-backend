@@ -38,7 +38,6 @@ export class UserToken {
   @ApiProperty()
   @Prop({
     required: true,
-    unique: true,
     type: String,
     lowercase: true,
     trim: true,

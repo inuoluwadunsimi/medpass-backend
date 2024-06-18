@@ -9,7 +9,7 @@ import {
   UserTokenDocument,
   UserToken,
 } from "./schemas";
-import randomString from "randomstring";
+import * as randomString from "randomstring";
 import { AuthResponse } from "../auth/interfaces/auth.responses";
 import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { GenerateTokenParam } from "../auth/jwt/jwt.interface";

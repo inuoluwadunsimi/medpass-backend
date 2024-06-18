@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { MailerService } from "@nestjs-modules/mailer";
 import { EmailInterface } from "./mail.interface";
 import * as path from "node:path";
-import fs from "fs";
+import * as fs from "fs";
 import { ConfigService } from "@nestjs/config";
 const templateDir = path.join(__dirname, "templates");
 
@@ -26,7 +26,7 @@ export class EmailService {
     otp: string,
     name: string
   ): Promise<void> {
-    const templatePath = path.join(templateDir, "otp.email.html");
+    const templatePath = path.join(templateDir, "otpEmail.html");
     const templateSource = fs.readFileSync(templatePath, "utf8");
     const html = templateSource
       .replace(/{{otp}}/g, otp)
@@ -43,7 +43,7 @@ export class EmailService {
     hospitalName: string,
     token: string
   ): Promise<void> {
-    const templatePath = path.join(templateDir, "invite.email.html");
+    const templatePath = path.join(templateDir, "inviteEmail.html");
     const templateSource = fs.readFileSync(templatePath, "utf8");
     const html = templateSource
       .replace(/{{name}}/g, hospitalName)

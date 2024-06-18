@@ -44,7 +44,6 @@ export class Otp {
   @ApiProperty()
   @Prop({
     required: true,
-    unique: true,
     type: String,
     lowercase: true,
   })
