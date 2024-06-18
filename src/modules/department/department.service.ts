@@ -53,8 +53,16 @@ export class DepartmentService {
     return department;
   }
 
-  public async getDepartments(hospitalId: string) {
-    return this.departmentModel.find({ hospital: hospitalId });
+  public async getDepartments(
+    hospitalId: string
+  ): Promise<DepartmentDocument[]> {
+    return await this.departmentModel.find({ hospital: hospitalId });
+  }
+
+  public async getDepartmentDoctors(
+    departmentId: string
+  ): Promise<DoctorDocument[]> {
+    return await this.doctorModel.find({ department: departmentId });
   }
 
   public async getDepartment(departmentId: string) {

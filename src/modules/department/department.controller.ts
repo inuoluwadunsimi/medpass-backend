@@ -20,6 +20,7 @@ import { CreateDepartment } from "./dtos/create.department.dto";
 import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { DepartmentService } from "./department.service";
 import { Request, Response } from "express";
+import { Doctor } from "./schema/doctor.schema";
 @UseGuards(AppAuthGuard)
 @Controller("hospital/:hospitalId/department")
 @ApiTags("department")
@@ -63,6 +64,23 @@ export class DepartmentController {
     }
   }
 
+  @ApiResponse({ status: 200, type: [Doctor] })
+  @Get("/doctor/:departmentId")
+  public async getDepartmentDoctors(
+    @Res() res: any,
+    @Param("departmentId") departmentId: string
+  ): Promise<void> {
+    try {
+      const data =
+        await this.departmentService.getDepartmentDoctors(departmentId);
+      ResponseManager.success(res, {
+        data,
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @ApiResponse({ status: 200, type: Department })
   @Get(":departmentId")
   public async getDepartment(
@@ -72,37 +90,6 @@ export class DepartmentController {
     try {
       const data = await this.departmentService.getDepartment(departmentId);
       ResponseManager.success(res, data);
-    } catch (err) {
-      ResponseManager.handleError(res, err);
-    }
-  }
-
-  @Patch(":departmentId")
-  public async updateDepartment(
-    @Body() body: any,
-    @Req() req: any,
-    @Res() res: any
-  ): Promise<void> {
-    try {
-      ResponseManager.success(res, {
-        message: "Department updated successfully",
-        data: body,
-      });
-    } catch (err) {
-      ResponseManager.handleError(res, err);
-    }
-  }
-
-  @Delete(":departmentId")
-  public async deleteDepartment(
-    @Req() req: any,
-    @Res() res: any
-  ): Promise<void> {
-    try {
-      ResponseManager.success(res, {
-        message: "Department deleted successfully",
-        data: {},
-      });
     } catch (err) {
       ResponseManager.handleError(res, err);
     }
