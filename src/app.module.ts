@@ -32,9 +32,7 @@ dotenv.config();
     MailerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         transport: {
-          host: "smtp.gmail.com",
-          port: 465,
-          secure: true,
+          service: "gmail",
           auth: {
             user: configService.get<string>("MAIL_USER"),
             pass: configService.get<string>("GMAIL_PASS"),

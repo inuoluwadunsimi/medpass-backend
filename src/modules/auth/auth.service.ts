@@ -42,6 +42,7 @@ export class AuthService {
     body: SignupDto,
     deviceId: string
   ): Promise<string> {
+    console.log(deviceId);
     const userExist = await this.userModel.findOne({ email: body.email });
     if (userExist) {
       throw new BadRequestException("user already exsits, signup instead");
@@ -59,7 +60,7 @@ export class AuthService {
       email: body.email,
       password: passwordHash,
       user: user.id,
-      recognisedDevice: [deviceId],
+      recognisedDevices: [deviceId],
     });
 
     const otp = this.userService.generateOtp();

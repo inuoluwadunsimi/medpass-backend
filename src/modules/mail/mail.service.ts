@@ -28,9 +28,7 @@ export class EmailService {
   ): Promise<void> {
     const templatePath = path.join(templateDir, "otpEmail.html");
     const templateSource = fs.readFileSync(templatePath, "utf8");
-    const html = templateSource
-      .replace(/{{otp}}/g, otp)
-      .replace(/{{name}}/g, name);
+    const html = templateSource.replace("{otp}", otp).replace("{name}", name);
     await this.sendMail({
       to: email,
       subject: "OTP for registration",
@@ -46,9 +44,9 @@ export class EmailService {
     const templatePath = path.join(templateDir, "inviteEmail.html");
     const templateSource = fs.readFileSync(templatePath, "utf8");
     const html = templateSource
-      .replace(/{{name}}/g, hospitalName)
+      .replace("{hospitalName}", hospitalName)
       .replace(
-        /{{verificatonLink}}/g,
+        "{verificationLink}",
         `${this.configService.get<string>("FRONTEND_URL")}/auth/invite/${token}`
       );
     await this.sendMail({
