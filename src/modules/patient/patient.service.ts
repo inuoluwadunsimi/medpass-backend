@@ -69,7 +69,9 @@ export class PatientService {
 
   public async createPatient(body: CreatePatientDto): Promise<PatientDocument> {
     const user = await this.userModel.create({
-      ...body,
+      email: body.email,
+      fullName: body.fullName,
+      phoneNumber: body.phoneNumber,
       role: UserRole.PATIENT,
     });
 
@@ -78,9 +80,17 @@ export class PatientService {
     const patient = await this.patientModel.create({
       user: user.id,
       patientId,
+      state: body.state,
+      homeAddress: body.homeAddress,
+      biodata: {
+        genotype: body.genotype,
+        gender: body.gender,
+        maritalStatus: body.maritalStatus,
+        bloodGroup: body.bloodGroup,
+      },
     });
 
-    return patient;
+    return patient.populate("user");
   }
 
   public async getPatientById(patientId: string): Promise<PatientDocument> {

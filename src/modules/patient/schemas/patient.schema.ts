@@ -52,6 +52,25 @@ export class Patient {
 
   @ApiProperty()
   @Prop({
+    required: true,
+    type: Date,
+  })
+  dateOfBirth: Date;
+
+  @ApiProperty()
+  @Prop({
+    type: String,
+  })
+  homeAddress: string;
+
+  @ApiProperty()
+  @Prop({
+    type: String,
+  })
+  state: string;
+
+  @ApiProperty()
+  @Prop({
     type: Biodata,
   })
   biodata: Biodata;

@@ -22,4 +22,34 @@ export class CreatePatientDto {
   @IsString()
   @ApiProperty({ example: "08012345678" })
   phoneNumber: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: "ogun" })
+  state: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: "feka" })
+  homeAddress: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: "male" })
+  gender: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: "single" })
+  maritalStatus: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: "single" })
+  genotype: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: "single" })
+  bloodGroup: string;
 }

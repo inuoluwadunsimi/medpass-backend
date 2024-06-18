@@ -13,15 +13,11 @@ export class Biodata {
 
   @ApiProperty()
   @Prop({ type: String })
-  height: string;
+  gender: string;
 
   @ApiProperty()
   @Prop({ type: String })
-  weight: string;
-
-  @ApiProperty()
-  @Prop({ type: [String] })
-  allergies: string[];
+  maritalStatus: string;
 }
 
 export const BiodataSchema = SchemaFactory.createForClass(Biodata);
