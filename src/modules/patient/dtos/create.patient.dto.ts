@@ -16,12 +16,7 @@ export class CreatePatientDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: "feka" })
-  firstName: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: "feka" })
-  lastName: string;
+  fullName: string;
 
   @IsOptional()
   @IsString()

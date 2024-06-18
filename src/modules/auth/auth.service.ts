@@ -47,8 +47,7 @@ export class AuthService {
 
     const user = await this.userModel.create({
       email: body.email,
-      firstName: body.firstName,
-      lastName: body.lastName,
+      fullName: body.fullName,
       role: UserRole.ADMIN,
     });
 
@@ -68,7 +67,7 @@ export class AuthService {
       otpType: OtpType.SIGN_UP,
     });
 
-    await this.emailService.sendOtpMail(body.email, otp, body.firstName);
+    await this.emailService.sendOtpMail(body.email, otp, body.fullName);
   }
 
   public async verifyOtp(
@@ -121,7 +120,7 @@ export class AuthService {
       deviceId,
       otpType: OtpType.SIGN_UP,
     });
-    await this.emailService.sendOtpMail(email, otp, user.firstName);
+    await this.emailService.sendOtpMail(email, otp, user.fullName);
   }
 
   public async doctorRegister(payload: DoctorRegister): Promise<AuthResponse> {
@@ -131,8 +130,7 @@ export class AuthService {
     const decoded = this.jwtHelper.verifyToken(token);
     const user = await this.userModel.create({
       email: decoded.email,
-      firstName: body.firstName,
-      lastName: body.lastName,
+      fullName: body.fullName,
       role: UserRole.DOCTOR,
     });
     await this.userAuthModel.create({

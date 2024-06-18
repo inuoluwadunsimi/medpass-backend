@@ -45,14 +45,7 @@ export class User {
     required: false,
     type: String,
   })
-  firstName: string;
-
-  @ApiProperty()
-  @Prop({
-    required: false,
-    type: String,
-  })
-  lastName: string;
+  fullName: string;
 
   @ApiProperty()
   @Prop({
