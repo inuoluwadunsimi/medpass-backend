@@ -38,11 +38,7 @@ export class AuthService {
     private readonly jwtHelper: JwtHelper
   ) {}
 
-  public async ownerRegister(
-    body: SignupDto,
-    deviceId: string
-  ): Promise<string> {
-    console.log(deviceId);
+  public async ownerRegister(body: SignupDto, deviceId: string): Promise<void> {
     const userExist = await this.userModel.findOne({ email: body.email });
     if (userExist) {
       throw new BadRequestException("user already exsits, signup instead");
@@ -73,8 +69,6 @@ export class AuthService {
     });
 
     await this.emailService.sendOtpMail(body.email, otp, body.firstName);
-
-    return otp;
   }
 
   public async verifyOtp(

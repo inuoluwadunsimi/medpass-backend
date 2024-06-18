@@ -56,10 +56,9 @@ export class AuthController {
   ): Promise<void> {
     const deviceId: string = req.get("User-Agent");
     try {
-      const data = await this.authService.ownerRegister(body, deviceId);
+      await this.authService.ownerRegister(body, deviceId);
       ResponseManager.success(res, {
         message: "Registered Successfully",
-        data,
       });
     } catch (err) {
       ResponseManager.handleError(res, err);
