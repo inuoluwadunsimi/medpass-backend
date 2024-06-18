@@ -56,11 +56,8 @@ export class PatientController {
     @Param() recordId: string
   ): Promise<void> {
     try {
-      const data = await this.patientService.forwardToDepartment(
-        recordId,
-        departmentId
-      );
-      ResponseManager.success(res, { data });
+      await this.patientService.forwardToDepartment(recordId, departmentId);
+      ResponseManager.success(res, { message: "forward to department" });
     } catch (err: any) {
       ResponseManager.handleError(res, err);
     }

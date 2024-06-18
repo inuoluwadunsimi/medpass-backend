@@ -13,6 +13,11 @@ import {
 } from "./dtos/create.appointment.dto";
 import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
 import { Appointment, AppointmentDocument } from "./schemas/appointment.schema";
+import {
+  Notification,
+  NotificationDocument,
+} from "../notification/schema/notification.schema";
+import { NotificationService } from "../notification/notification.service";
 
 @Injectable()
 export class PatientService {
@@ -21,7 +26,10 @@ export class PatientService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
     @InjectModel(Appointment.name)
-    private appointmentModel: Model<AppointmentDocument>
+    private appointmentModel: Model<AppointmentDocument>,
+    @InjectModel(Notification.name)
+    private notificationModel: Model<NotificationDocument>,
+    private readonly notificationService: NotificationService
   ) {}
 
   public async generatePatientId(): Promise<string> {
@@ -39,7 +47,7 @@ export class PatientService {
   public async generateRecord(): Promise<string> {
     const digits = Math.floor(10000000 + Math.random() * 90000000);
 
-    const uniqueId = `PAT-${digits}`;
+    const uniqueId = `REC-${digits}`;
     const check = await this.appointmentModel.find({ record_id: uniqueId });
 
     if (isEmpty(check)) {
@@ -181,5 +189,21 @@ export class PatientService {
   public async forwardToDepartment(
     recordId: string,
     departmentId: string
-  ): Promise<void> {}
+  ): Promise<void> {
+    const record = await this.appointmentModel.findOne<AppointmentDocument>({
+      _id: recordId,
+    });
+
+    const doctors = await this.doctorModel.find<DoctorDocument>({
+      department: departmentId,
+    });
+    for (const doctor of doctors) {
+      const user = doctor.user as string;
+      await this.notificationService.createNotification({
+        title: "Patient Forwarded",
+        body: `Patient record with id of ${record.record_id} has been forwarded to you, kindly look into it `,
+        user: user,
+      });
+    }
+  }
 }
