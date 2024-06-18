@@ -46,9 +46,10 @@ export class AuthController {
   @Post("admin/register")
   @ApiResponse({
     status: 201,
-    description: "Registered Successfully",
+    description: "Otp sent successfully",
     type: String,
   })
+  @ApiOperation({ summary: " request admin otp" })
   public async ownerRegister(
     @Body() body: SignupDto,
     @Req() req: Request,
@@ -131,6 +132,7 @@ export class AuthController {
   }
 
   @Post("otp/verify")
+  @ApiOperation({ summary: " verify otp" })
   @ApiResponse({
     status: 201,
     type: AuthResponse,

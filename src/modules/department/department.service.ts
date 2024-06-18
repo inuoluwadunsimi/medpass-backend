@@ -7,7 +7,10 @@ import {
   HospitalDocument,
 } from "../hospital/schemas/hospital.schema";
 import { Doctor, DoctorDocument } from "./schema/doctor.schema";
-import { CreateDepartment } from "./dtos/create.department.dto";
+import {
+  CreateDepartment,
+  inviteDoctorDto,
+} from "./dtos/create.department.dto";
 import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { JwtType } from "../auth/jwt/jwt.interface";
 import { EmailService } from "../mail/mail.service";
@@ -73,5 +76,26 @@ export class DepartmentService {
       throw new NotFoundException("Department not found");
     }
     return department;
+  }
+
+  public async inviteDoctor(body: inviteDoctorDto) {
+    const { email, departmentId } = body;
+    const department = await this.departmentModel
+      .findById<DepartmentDocument>(departmentId)
+      .populate("hospital");
+    const hospital = department.hospital as HospitalDocument;
+
+    const token = this.jwtHelper.generateToken({
+      email: email,
+      type: JwtType.HOD,
+      hospital: hospital.id,
+      department: department.id,
+    });
+
+    await this.emailService.sendInviteEmail(
+      email,
+      hospital.name,
+      token.accessToken
+    );
   }
 }

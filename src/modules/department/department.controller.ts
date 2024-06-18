@@ -14,9 +14,12 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Department, DepartmentSchema } from "./schema/department.schema";
-import { CreateDepartment } from "./dtos/create.department.dto";
+import {
+  CreateDepartment,
+  inviteDoctorDto,
+} from "./dtos/create.department.dto";
 import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { DepartmentService } from "./department.service";
 import { Request, Response } from "express";
@@ -56,8 +59,24 @@ export class DepartmentController {
     try {
       const data = await this.departmentService.getDepartments(hospitalId);
       ResponseManager.success(res, {
-        message: "Department fetched successfully",
         data,
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @ApiOperation({ summary: "invite doctor to department" })
+  @ApiResponse({ status: 200, description: "invite email sent" })
+  @Post("/doctor")
+  public async inviteDoctor(
+    @Res() res: Response,
+    @Body() body: inviteDoctorDto
+  ): Promise<void> {
+    try {
+      await this.departmentService.inviteDoctor(body);
+      ResponseManager.success(res, {
+        message: "invite email sent",
       });
     } catch (err) {
       ResponseManager.handleError(res, err);
