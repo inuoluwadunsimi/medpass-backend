@@ -41,7 +41,6 @@ export class UserController {
     try {
       const data = await this.userService.getUserProfile(user);
       ResponseManager.success(res, { data });
-      ``;
     } catch (err: any) {
       ResponseManager.handleError(res, err);
     }

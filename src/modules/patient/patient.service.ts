@@ -162,4 +162,9 @@ export class PatientService {
       await this.appointmentModel.find<AppointmentDocument>(filter);
     return records;
   }
+
+  public async forwardToDepartment(
+    recordId: string,
+    departmentId: string
+  ): Promise<void> {}
 }

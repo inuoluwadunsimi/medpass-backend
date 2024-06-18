@@ -47,6 +47,25 @@ export class PatientController {
     }
   }
 
+  @Post("/record/forward/:recordId")
+  @ApiResponse({ status: 201, description: "forwarded to department" })
+  @ApiResponse({ status: 201, type: Patient })
+  public async forwardToDepartment(
+    @Res() res,
+    @Body() departmentId: string,
+    @Param() recordId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.forwardToDepartment(
+        recordId,
+        departmentId
+      );
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @Get("/record/:patientId")
   @ApiResponse({ status: 200, type: [Appointment] })
   @ApiOperation({
