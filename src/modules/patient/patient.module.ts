@@ -20,6 +20,7 @@ import {
   Notification,
 } from "../notification/schema/notification.schema";
 import { NotificationService } from "../notification/notification.service";
+import { AiService } from "./ai.search.service";
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { NotificationService } from "../notification/notification.service";
     ]),
   ],
   controllers: [PatientController],
-  providers: [PatientService, JwtService, NotificationService],
+  providers: [PatientService, JwtService, NotificationService, AiService],
   exports: [PatientService],
 })
 export class PatientModule {}

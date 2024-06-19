@@ -18,6 +18,7 @@ import {
   NotificationDocument,
 } from "../notification/schema/notification.schema";
 import { NotificationService } from "../notification/notification.service";
+import { AiService } from "./ai.search.service";
 
 @Injectable()
 export class PatientService {
@@ -29,7 +30,8 @@ export class PatientService {
     private appointmentModel: Model<AppointmentDocument>,
     @InjectModel(Notification.name)
     private notificationModel: Model<NotificationDocument>,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly aiService: AiService
   ) {}
 
   public async generatePatientId(): Promise<string> {

@@ -24,7 +24,7 @@ export class AppAuthGuard implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verify(token, {
-        secret: `${this.configService.get<string>("JWT_SECRET")}`,
+        secret: `${this.configService.get<string>("JWT_PRIVATE_KEY")}`,
       });
 
       request.userId = payload.userId;
