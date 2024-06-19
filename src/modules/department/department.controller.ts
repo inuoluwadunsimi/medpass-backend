@@ -25,6 +25,7 @@ import { DepartmentService } from "./department.service";
 import { Request, Response } from "express";
 import { Doctor } from "./schema/doctor.schema";
 import { IExpressRequest } from "../auth/jwt/jwt.interface";
+import { Appointment } from "../patient/schemas/appointment.schema";
 @UseGuards(AppAuthGuard)
 @Controller("hospital/:hospitalId/department")
 @ApiTags("department")
@@ -50,6 +51,7 @@ export class DepartmentController {
   }
 
   @ApiResponse({ status: 200, type: [Department] })
+  @ApiOperation({ summary: "get departments" })
   @Get()
   public async getDepartments(
     @Res() res: any,
@@ -65,12 +67,13 @@ export class DepartmentController {
     }
   }
 
-  @ApiResponse({ status: 200, type: [Department] })
+  @ApiResponse({ status: 200, type: [Appointment] })
   @ApiOperation({ summary: "get department records" })
   @Get("/records/:departmentId")
   public async getDepartmentRecords(
     @Res() res: any,
-    @Param("departmentId") departmentId: string
+    @Param("departmentId") departmentId: string,
+    @Param("hospitalId") hospitalId: string
   ): Promise<void> {
     try {
       const data =
@@ -86,6 +89,7 @@ export class DepartmentController {
   @ApiResponse({
     status: 200,
   })
+  @ApiOperation({ summary: "get dashboard" })
   @Get("/dashboard/:departmentId")
   public async getDashboard(
     @Res() res: any,
