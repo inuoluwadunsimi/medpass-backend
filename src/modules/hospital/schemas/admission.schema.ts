@@ -5,6 +5,10 @@ import { Document } from "mongoose";
 import { Hospital, HospitalDocument } from "./hospital.schema";
 import { DoctorDocument } from "../../department/schema/doctor.schema";
 import { Patient, PatientDocument } from "../../patient/schemas/patient.schema";
+import {
+  Department,
+  DepartmentDocument,
+} from "../../department/schema/department.schema";
 
 export enum AdmissionStatus {
   ADMITTED = "admitted",
@@ -79,6 +83,14 @@ export class Admission {
     ref: Patient.name,
   })
   patient: PatientDocument | string;
+
+  @ApiProperty()
+  @Prop({
+    required: true,
+    type: String,
+    ref: Department.name,
+  })
+  department: DepartmentDocument | string;
 
   @ApiProperty()
   @Prop({

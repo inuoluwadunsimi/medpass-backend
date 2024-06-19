@@ -11,12 +11,21 @@ import { KycModule } from "../kyc/kyc.module";
 import { KYC, KYCSchema } from "../kyc/schemas/kyc.schema";
 import { CloudinaryService } from "../cloudinary/cloudinary.service";
 import { Doctor, DoctorSchema } from "../department/schema/doctor.schema";
+import {
+  Admission,
+  AdmissionSchema,
+  DosageTreatment,
+  DosageTreatmentSchema,
+} from "./schemas/admission.schema";
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Hospital.name, schema: HospitalSchema },
       { name: KYC.name, schema: KYCSchema },
+      { name: Doctor.name, schema: DoctorSchema },
+      { name: Admission.name, schema: AdmissionSchema },
+      { name: DosageTreatment.name, schema: DosageTreatmentSchema },
       { name: Doctor.name, schema: DoctorSchema },
     ]),
     KycModule,

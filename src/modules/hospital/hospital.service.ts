@@ -3,11 +3,17 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Hospital, HospitalDocument } from "./schemas/hospital.schema";
 import { CreateHospitalDto } from "./dtos/create-hospital.dto";
+import { CreateAppointmentDto } from "../patient/dtos/create.appointment.dto";
+import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
+import { Admission, AdmissionDocument } from "./schemas/admission.schema";
 
 @Injectable()
 export class HospitalService {
   constructor(
-    @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>
+    @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>,
+    @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
+    @InjectModel(Admission.name)
+    private admissionModel: Model<AdmissionDocument>
   ) {}
 
   public async createHospital(
@@ -31,5 +37,22 @@ export class HospitalService {
     }
 
     return hospital;
+  }
+
+  public async admitPatient(
+    body: CreateAppointmentDto,
+    user: string,
+    patientId: string
+  ) {
+    const doctor = await this.doctorModel.findOne<DoctorDocument>({ user });
+    const department = doctor.department as string;
+    const hospital = doctor.hospital as string;
+    await this.admissionModel.create({
+      patient: patientId,
+      doctor: doctor.id,
+      hospital: hospital,
+      department,
+      ...body,
+    });
   }
 }
