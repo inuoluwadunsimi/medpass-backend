@@ -52,7 +52,6 @@ export class Patient {
 
   @ApiProperty()
   @Prop({
-    required: true,
     type: Date,
   })
   dateOfBirth: Date;

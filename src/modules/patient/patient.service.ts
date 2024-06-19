@@ -75,7 +75,9 @@ export class PatientService {
   }
 
   public async createPatient(body: CreatePatientDto): Promise<PatientDocument> {
-    const userDets = await this.userModel.find({ email: body.email });
+    console.log(body.email);
+    const userDets = await this.userModel.findOne({ email: body.email });
+    console.log(userDets);
     if (userDets) {
       throw new BadRequestException("account already created");
     }
