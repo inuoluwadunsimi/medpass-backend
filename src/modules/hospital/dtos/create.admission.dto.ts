@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import {
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsString,
+  ValidateNested,
+} from "class-validator";
 import { Type } from "class-transformer";
 
 export class DosageDto {
@@ -39,6 +45,10 @@ export class CreateAdmissionDto {
   @IsArray()
   @ApiProperty({ example: ["golam", "folape"] })
   diagnosis: string[];
+
+  @IsNotEmpty()
+  @IsDateString()
+  admissionDate: Date;
 
   @IsNotEmpty()
   @ValidateNested()

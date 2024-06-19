@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   Res,
   UploadedFile,
@@ -37,6 +38,7 @@ import { KycEnums } from "../kyc/enums/kyc.enums";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { KycService } from "../kyc/kyc.service";
 import { CreateAdmissionDto } from "./dtos/create.admission.dto";
+import { AdmissionStatus } from "./schemas/admission.schema";
 
 @Controller("hospital")
 @ApiTags("hospital")
@@ -95,8 +97,35 @@ export class HospitalController {
     }
   }
 
+  @ApiOperation({ summary: "get all admitted patients" })
+  @Get("/admitted-patient/:hospitalId")
+  public async getAllAdmittedPatients(
+    @Param() hospitalId: string,
+    @Res() res: Response,
+    @Query()
+    query: {
+      status: AdmissionStatus;
+      departmentId: string;
+      from: Date;
+      to: Date;
+    }
+  ): Promise<void> {
+    try {
+      const data = await this.hospitalService.getAllAdmittedPatients(
+        query.departmentId,
+        hospitalId,
+        query.status,
+        query.from,
+        query.to
+      );
+      ResponseManager.success(res, { data });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @ApiOperation({ summary: "admit patient" })
-  @Post("/admit/patientId")
+  @Post("/admit/:patientId")
   public async admitPatient(
     @Req() req: IExpressRequest,
     @Param() patientId: string,

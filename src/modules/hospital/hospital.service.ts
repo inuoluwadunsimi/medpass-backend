@@ -5,7 +5,11 @@ import { Hospital, HospitalDocument } from "./schemas/hospital.schema";
 import { CreateHospitalDto } from "./dtos/create-hospital.dto";
 import { CreateAppointmentDto } from "../patient/dtos/create.appointment.dto";
 import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
-import { Admission, AdmissionDocument } from "./schemas/admission.schema";
+import {
+  Admission,
+  AdmissionDocument,
+  AdmissionStatus,
+} from "./schemas/admission.schema";
 import { CreateAdmissionDto } from "./dtos/create.admission.dto";
 
 @Injectable()
@@ -56,5 +60,34 @@ export class HospitalService {
       ...body,
     });
     return admission;
+  }
+
+  public async getAllAdmittedPatients(
+    departmentId: string,
+    hospitalId: string,
+    status: AdmissionStatus,
+    from: Date,
+    to: Date
+  ): Promise<AdmissionDocument[]> {
+    const filter: any = { hospital: hospitalId };
+    if (departmentId) {
+      filter.department = departmentId;
+    }
+    if (status) {
+      filter.status = status;
+    }
+
+    if (from && to) {
+      filter.date = {
+        $gte: from,
+        $lte: to,
+      };
+    }
+    return await this.admissionModel
+      .find(filter)
+      .populate("patient")
+      .populate("doctor")
+      .populate("hospital")
+      .populate("department");
   }
 }
