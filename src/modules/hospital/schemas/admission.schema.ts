@@ -25,6 +25,9 @@ export class DosageTreatment {
   measurement: string;
 }
 
+export const DosageTreatmentSchema =
+  SchemaFactory.createForClass(DosageTreatment);
+
 @Schema({
   timestamps: true,
   versionKey: false,
@@ -111,6 +114,7 @@ export class Admission {
   @Prop({
     type: String,
     enum: Object.values(AdmissionStatus),
+    default: AdmissionStatus.ADMITTED,
   })
   status: AdmissionStatus;
 

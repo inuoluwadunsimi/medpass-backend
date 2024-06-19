@@ -9,6 +9,7 @@ import {
   MinLength,
   ValidateNested,
 } from "class-validator";
+import { Type } from "class-transformer";
 
 export class TreatmentDto {
   @ApiProperty({ example: "aspirin" })
@@ -61,9 +62,11 @@ export class CreateAppointmentDto {
 export class UpdateAppointmentDto extends CreateAppointmentDto {
   @ApiProperty()
   @ValidateNested()
+  @Type(() => TreatmentDto)
   treatment: TreatmentDto;
 
   @ApiProperty()
   @ValidateNested()
+  @Type(() => PrescriptionDto)
   prescription: PrescriptionDto;
 }
