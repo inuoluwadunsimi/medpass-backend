@@ -6,6 +6,20 @@ import { Hospital, HospitalDocument } from "./hospital.schema";
 import { DoctorDocument } from "../../department/schema/doctor.schema";
 import { Patient, PatientDocument } from "../../patient/schemas/patient.schema";
 
+export class DosageTreatment {
+  @ApiProperty()
+  @Prop({ type: String })
+  name: string;
+
+  @ApiProperty()
+  @Prop({ type: String })
+  dosage: string;
+
+  @ApiProperty()
+  @Prop({ type: String })
+  measurement: string;
+}
+
 @Schema({
   timestamps: true,
   versionKey: false,
@@ -81,4 +95,10 @@ export class Admission {
     type: [String],
   })
   diagnosis: string[];
+
+  @ApiProperty()
+  @Prop({
+    type: DosageTreatment,
+  })
+  treatment: DosageTreatment;
 }
