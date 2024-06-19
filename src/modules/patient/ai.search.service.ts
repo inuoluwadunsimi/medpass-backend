@@ -17,4 +17,8 @@ export class AiService {
     const similarity = natural.DiceCoefficient(textTokens, keywordTokens);
     return similarity > 0.5; // Adjust threshold as necessary
   }
+
+  analyzeArrayText(textArray: string[], keyword: string): boolean {
+    return textArray.some((text) => this.analyzeText(text, keyword));
+  }
 }

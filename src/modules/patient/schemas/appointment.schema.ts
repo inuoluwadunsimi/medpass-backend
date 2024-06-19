@@ -118,7 +118,7 @@ export class Appointment {
     required: true,
     type: [String],
   })
-  complaint: String[];
+  complaint: string[];
 
   @ApiProperty()
   @Prop({
@@ -126,14 +126,14 @@ export class Appointment {
     unique: true,
     type: String,
   })
-  record_id: String;
+  record_id: string;
 
   @ApiProperty()
   @Prop({
     required: true,
     type: [String],
   })
-  doctorsReport: String[];
+  doctorsReport: string[];
 
   @ApiProperty()
   @Prop({

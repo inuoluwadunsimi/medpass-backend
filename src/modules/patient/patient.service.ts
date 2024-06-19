@@ -238,4 +238,18 @@ export class PatientService {
       });
     return results;
   }
+
+  public async searchDiagnosis(term: string, patientId: string) {
+    const records = await this.appointmentModel.find<AppointmentDocument>({
+      patient: patientId,
+    });
+    const results = [];
+    for (const record of records) {
+      const match = this.aiService.analyzeArrayText(record.doctorsReport, term);
+      if (match) {
+        results.push(record);
+      }
+    }
+    return results;
+  }
 }
