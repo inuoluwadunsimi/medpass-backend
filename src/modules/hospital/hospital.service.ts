@@ -62,6 +62,23 @@ export class HospitalService {
     return admission;
   }
 
+  public async changeAdmissionStatus(body: {
+    status: AdmissionStatus;
+    admissionId: string;
+  }) {
+    const { status, admissionId } = body;
+    const admission =
+      await this.admissionModel.findOneAndUpdate<AdmissionDocument>(
+        { _id: admissionId },
+        { status },
+        { new: true }
+      );
+    if (!admission) {
+      throw new NotFoundException("Admission not found");
+    }
+    return admission;
+  }
+
   public async getAllAdmittedPatients(
     departmentId: string,
     hospitalId: string,

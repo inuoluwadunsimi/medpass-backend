@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   Req,
   Res,
@@ -39,7 +40,7 @@ import { KycEnums } from "../kyc/enums/kyc.enums";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { KycService } from "../kyc/kyc.service";
 import { CreateAdmissionDto } from "./dtos/create.admission.dto";
-import { AdmissionStatus } from "./schemas/admission.schema";
+import { Admission, AdmissionStatus } from "./schemas/admission.schema";
 
 @Controller("hospital")
 @ApiTags("hospital")
@@ -62,6 +63,20 @@ export class HospitalController {
     const user = req.userId;
     try {
       const data = await this.hospitalService.createHospital(body, user);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
+  @Put("/admission/status")
+  @ApiResponse({ status: 200, type: Admission })
+  public async changeAdmissionStatus(
+    @Res() res: Response,
+    @Body() body: { status: AdmissionStatus; admissionId: string }
+  ): Promise<void> {
+    try {
+      const data = await this.hospitalService.changeAdmissionStatus(body);
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);
