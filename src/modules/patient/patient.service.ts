@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { isEmpty } from "lodash";
 import { Patient, PatientDocument } from "./schemas/patient.schema";
@@ -72,7 +76,7 @@ export class PatientService {
   public async createPatient(body: CreatePatientDto): Promise<PatientDocument> {
     const userDets = await this.userModel.find({ email: body.email });
     if (userDets) {
-      throw new NotFoundException("account already created");
+      throw new BadRequestException("account already created");
     }
     const user = await this.userModel.create({
       email: body.email,
