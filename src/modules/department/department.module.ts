@@ -11,6 +11,14 @@ import { DepartmentService } from "./department.service";
 import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { JwtService } from "@nestjs/jwt";
 import { EmailService } from "../mail/mail.service";
+import {
+  Admission,
+  AdmissionSchema,
+} from "../hospital/schemas/admission.schema";
+import {
+  Appointment,
+  AppointmentSchema,
+} from "../patient/schemas/appointment.schema";
 
 @Module({
   imports: [
@@ -20,6 +28,8 @@ import { EmailService } from "../mail/mail.service";
       { name: User.name, schema: UserSchema },
       { name: Department.name, schema: DepartmentSchema },
       { name: User.name, schema: UserSchema },
+      { name: Admission.name, schema: AdmissionSchema },
+      { name: Appointment.name, schema: AppointmentSchema },
     ]),
     UserModule,
     HospitalModule,
