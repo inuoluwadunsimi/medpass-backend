@@ -22,6 +22,7 @@ import * as ResponseManager from "../../helpers/response.helpers";
 import {
   ApiConsumes,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
@@ -97,6 +98,10 @@ export class HospitalController {
     }
   }
 
+  @ApiQuery({ name: "status", enum: AdmissionStatus, required: false })
+  @ApiQuery({ name: "departmentId", type: String, required: false })
+  @ApiQuery({ name: "from", type: Date, required: false })
+  @ApiQuery({ name: "to", type: Date, required: false })
   @ApiOperation({ summary: "get all admitted patients" })
   @Get("/admitted-patient/:hospitalId")
   public async getAllAdmittedPatients(

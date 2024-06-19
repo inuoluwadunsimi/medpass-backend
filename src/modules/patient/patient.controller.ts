@@ -63,6 +63,10 @@ export class PatientController {
     }
   }
 
+  @ApiQuery({ name: "hospitalId", required: false, type: String })
+  @ApiQuery({ name: "departmentId", required: false, type: String })
+  @ApiQuery({ name: "from", required: false, type: Date })
+  @ApiQuery({ name: "to", required: false, type: Date })
   @Get("/record/:patientId")
   @ApiResponse({ status: 200, type: [Appointment] })
   @ApiOperation({

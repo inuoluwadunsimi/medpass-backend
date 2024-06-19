@@ -186,13 +186,17 @@ export class PatientService {
   public async getAllRecords(body: {
     patientId: string;
     hospitalId?: string;
+    departmentId?: string;
     from?: Date;
     to?: Date;
   }): Promise<AppointmentDocument[]> {
-    const { patientId, hospitalId, from, to } = body;
+    const { patientId, hospitalId, from, to, departmentId } = body;
     const filter: any = { patient: patientId };
     if (hospitalId) {
       filter.hospital = hospitalId;
+    }
+    if (departmentId) {
+      filter.department = departmentId;
     }
 
     if (from && to) {
