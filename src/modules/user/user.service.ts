@@ -14,6 +14,12 @@ import { AuthResponse } from "../auth/interfaces/auth.responses";
 import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { GenerateTokenParam } from "../auth/jwt/jwt.interface";
 import { SaveToken } from "./interfaces/user.requests";
+import { UserRole } from "./interfaces/user.enums";
+import {
+  Hospital,
+  HospitalDocument,
+} from "../hospital/schemas/hospital.schema";
+import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
 
 @Injectable()
 export class UserService {
@@ -22,6 +28,8 @@ export class UserService {
     @InjectModel(UserAuth.name) private userAuthModel: Model<UserAuthDocument>,
     @InjectModel(UserToken.name)
     private userTokenModel: Model<UserTokenDocument>,
+    @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>,
+    @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
     private readonly jwtHelper: JwtHelper
   ) {}
 
@@ -29,12 +37,27 @@ export class UserService {
     return this.userModel.create(user);
   }
 
-  public async getUserProfile(userId: string): Promise<UserDocument> {
-    const user = await this.userModel.findOne({ _id: userId });
+  public async getUserProfile(userId: string): Promise<any> {
+    let finalUser: any;
+    const user = await this.userModel.findOne<UserDocument>({ _id: userId });
     if (!user) {
       throw new NotFoundException("user does not exist");
     }
-    return user;
+    if (user.role === UserRole.ADMIN) {
+      const hospital = await this.hospitalModel.findOne<HospitalDocument>({
+        created_by: userId,
+      });
+      finalUser = { ...user, hospital: hospital.id };
+    }
+    if (user.role === UserRole.DOCTOR) {
+      const doctor = await this.doctorModel.findOne<DoctorDocument>({ user });
+      finalUser = {
+        ...user,
+        hospital: doctor.hospital,
+        department: doctor.department,
+      };
+    }
+    return finalUser;
   }
 
   public generateOtp(): string {
