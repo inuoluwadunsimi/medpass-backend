@@ -11,7 +11,7 @@ import {
   Req,
 } from "@nestjs/common";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PatientService } from "./patient.service";
 import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { Patient } from "./schemas/patient.schema";
@@ -134,8 +134,9 @@ export class PatientController {
 
   @Get("/search")
   @ApiResponse({ status: 200, type: [Patient] })
+  @ApiQuery({ name: "patientId", required: true, type: String })
   public async searchPatientById(
-    @Res() res,
+    @Res() res: Response,
     @Query() patientId: string
   ): Promise<void> {
     try {
