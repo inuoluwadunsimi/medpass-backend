@@ -14,6 +14,7 @@ import {
 import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { JwtType } from "../auth/jwt/jwt.interface";
 import { EmailService } from "../mail/mail.service";
+import { User, UserDocument } from "../user/schemas";
 
 @Injectable()
 export class DepartmentService {
@@ -22,6 +23,8 @@ export class DepartmentService {
     private departmentModel: Model<DepartmentDocument>,
     @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>,
     @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+
     private jwtHelper: JwtHelper,
     private readonly emailService: EmailService
   ) {}
@@ -34,26 +37,35 @@ export class DepartmentService {
       throw new NotFoundException("Hospital not found");
     }
 
+    let doctor;
+    const hodExists = await this.userModel.findOne({ email: body.hodEmail });
+    if (hodExists) {
+      const doctorDetails = await this.doctorModel.findOne({
+        user: hodExists.id,
+      });
+      doctor = doctorDetails.id;
+    }
     const department = await this.departmentModel.create({
       hospital: hospital.id,
       departmentName: body.departmentName,
       departmentEmail: body.departmentEmail,
       description: body.description,
-      departmentHead: user,
+      ...(hodExists && { departmentHead: doctor }),
     });
+    if (!hodExists) {
+      const token = this.jwtHelper.generateToken({
+        email: body.hodEmail,
+        type: JwtType.HOD,
+        hospital: hospital.id,
+        department: department.id,
+      });
 
-    const token = this.jwtHelper.generateToken({
-      email: body.hodEmail,
-      type: JwtType.HOD,
-      hospital: hospital.id,
-      department: department.id,
-    });
-
-    await this.emailService.sendInviteEmail(
-      body.hodEmail,
-      hospital.name,
-      token.accessToken
-    );
+      await this.emailService.sendInviteEmail(
+        body.hodEmail,
+        hospital.name,
+        token.accessToken
+      );
+    }
 
     return department.populate({
       path: "departmentHead",

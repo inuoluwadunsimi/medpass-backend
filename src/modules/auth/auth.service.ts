@@ -25,6 +25,10 @@ import { AuthResponse } from "./interfaces/auth.responses";
 import { LoginDto } from "./dtos/login.dto";
 import { DoctorRegister } from "./interfaces/doctorRegister";
 import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
+import {
+  Department,
+  DepartmentDocument,
+} from "../department/schema/department.schema";
 
 @Injectable()
 export class AuthService {
@@ -33,6 +37,8 @@ export class AuthService {
     @InjectModel(UserAuth.name) private userAuthModel: Model<UserAuthDocument>,
     @InjectModel(Otp.name) private otpModel: Model<OtpDocument>,
     @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
+    @InjectModel(Department.name)
+    private departmentModel: Model<DepartmentDocument>,
     private readonly userService: UserService,
     private readonly emailService: EmailService,
     private readonly jwtHelper: JwtHelper
@@ -128,11 +134,19 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(body.password, 10);
 
     const decoded = this.jwtHelper.verifyToken(token);
+
     const user = await this.userModel.create({
       email: decoded.email,
       fullName: body.fullName,
       role: UserRole.DOCTOR,
     });
+    if (decoded.type === JwtType.HOD) {
+      await this.departmentModel.updateOne(
+        { _id: decoded.department },
+        { departmentHead: user.id }
+      );
+    }
+
     await this.userAuthModel.create({
       email: body.email,
       password: passwordHash,

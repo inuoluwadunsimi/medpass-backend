@@ -24,6 +24,10 @@ import { Hospital, HospitalSchema } from "../hospital/schemas/hospital.schema";
 import { KycModule } from "../kyc/kyc.module";
 import { CloudinaryService } from "../cloudinary/cloudinary.service";
 import { JwtStrategy } from "./strategies/jwt.strategy";
+import {
+  Department,
+  DepartmentSchema,
+} from "../department/schema/department.schema";
 
 @Module({
   imports: [
@@ -34,6 +38,7 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
       { name: Doctor.name, schema: DoctorSchema },
       { name: KYC.name, schema: KYCSchema },
       { name: Hospital.name, schema: HospitalSchema },
+      { name: Department.name, schema: DepartmentSchema },
     ]),
     UserModule,
     KycModule,

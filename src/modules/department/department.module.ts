@@ -19,6 +19,7 @@ import { EmailService } from "../mail/mail.service";
       { name: Doctor.name, schema: DoctorSchema },
       { name: User.name, schema: UserSchema },
       { name: Department.name, schema: DepartmentSchema },
+      { name: User.name, schema: UserSchema },
     ]),
     UserModule,
     HospitalModule,
