@@ -106,7 +106,7 @@ export class DepartmentController {
     }
   }
 
-  @ApiOperation({ summary: "invite doctor to department" })
+  @ApiOperation({ summary: "invite doctor to department xxx" })
   @ApiResponse({ status: 200, description: "invite email sent" })
   @Post("/doctor")
   public async inviteDoctor(
