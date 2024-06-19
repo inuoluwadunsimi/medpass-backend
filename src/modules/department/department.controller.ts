@@ -67,7 +67,7 @@ export class DepartmentController {
 
   @ApiResponse({ status: 200, type: [Department] })
   @ApiOperation({ summary: "get department records" })
-  @Get("/records")
+  @Get("/records/:departmentId")
   public async getDepartmentRecords(
     @Res() res: any,
     @Param("departmentId") departmentId: string

@@ -100,7 +100,11 @@ export class DepartmentService {
   public async getDepartmentDoctors(
     departmentId: string
   ): Promise<DoctorDocument[]> {
-    return await this.doctorModel.find({ department: departmentId });
+    return await this.doctorModel
+      .find({ department: departmentId })
+      .populate("hospital")
+      .populate("user")
+      .populate("department");
   }
 
   public async getDepartmentRecords(departmentId: string) {
