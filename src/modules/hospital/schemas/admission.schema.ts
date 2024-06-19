@@ -6,6 +6,11 @@ import { Hospital, HospitalDocument } from "./hospital.schema";
 import { DoctorDocument } from "../../department/schema/doctor.schema";
 import { Patient, PatientDocument } from "../../patient/schemas/patient.schema";
 
+export enum AdmissionStatus {
+  ADMITTED = "admitted",
+  DISCHARGED = "discharged",
+}
+
 export class DosageTreatment {
   @ApiProperty()
   @Prop({ type: String })
@@ -101,4 +106,20 @@ export class Admission {
     type: DosageTreatment,
   })
   treatment: DosageTreatment;
+
+  @ApiProperty()
+  @Prop({
+    type: String,
+    enum: Object.values(AdmissionStatus),
+  })
+  status: AdmissionStatus;
+
+  @ApiProperty()
+  @Prop({
+    type: Date,
+  })
+  admissionDate: Date;
 }
+
+export type AdmissionDocument = Admission & Document;
+export const AdmissionSchema = SchemaFactory.createForClass(Admission);
