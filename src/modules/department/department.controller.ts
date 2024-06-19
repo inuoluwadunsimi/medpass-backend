@@ -72,7 +72,7 @@ export class DepartmentController {
   public async getDashboard(
     @Res() res: any,
     @Param("hospitalId") hospitalId: string,
-    @Param("hospitalId") departmentId: string
+    @Param("departmentId") departmentId: string
   ): Promise<void> {
     try {
       const data = await this.departmentService.getDashboard(departmentId);
