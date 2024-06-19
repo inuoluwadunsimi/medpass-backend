@@ -37,6 +37,6 @@ export class AppAuthGuard implements CanActivate {
     return true;
   }
   private extractTokenFromHeader(request: Request): string | undefined {
-    return request.cookies["x-auth-token"] as string;
+    return request.headers["x-auth-token"] as string;
   }
 }

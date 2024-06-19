@@ -6,6 +6,7 @@ import { CreateHospitalDto } from "./dtos/create-hospital.dto";
 import { CreateAppointmentDto } from "../patient/dtos/create.appointment.dto";
 import { Doctor, DoctorDocument } from "../department/schema/doctor.schema";
 import { Admission, AdmissionDocument } from "./schemas/admission.schema";
+import { CreateAdmissionDto } from "./dtos/create.admission.dto";
 
 @Injectable()
 export class HospitalService {
@@ -40,19 +41,20 @@ export class HospitalService {
   }
 
   public async admitPatient(
-    body: CreateAppointmentDto,
+    body: CreateAdmissionDto,
     user: string,
     patientId: string
   ) {
     const doctor = await this.doctorModel.findOne<DoctorDocument>({ user });
     const department = doctor.department as string;
     const hospital = doctor.hospital as string;
-    await this.admissionModel.create({
+    const admission = await this.admissionModel.create({
       patient: patientId,
       doctor: doctor.id,
       hospital: hospital,
       department,
       ...body,
     });
+    return admission;
   }
 }

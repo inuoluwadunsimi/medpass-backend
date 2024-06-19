@@ -18,7 +18,12 @@ import {
 } from "@nestjs/common";
 import { memoryStorage } from "multer";
 import * as ResponseManager from "../../helpers/response.helpers";
-import { ApiConsumes, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { HospitalService } from "./hospital.service";
 import { Request, Response } from "express";
 import { CreateHospitalDto } from "./dtos/create-hospital.dto";
@@ -31,6 +36,7 @@ import { IExpressRequest } from "../auth/jwt/jwt.interface";
 import { KycEnums } from "../kyc/enums/kyc.enums";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { KycService } from "../kyc/kyc.service";
+import { CreateAdmissionDto } from "./dtos/create.admission.dto";
 
 @Controller("hospital")
 @ApiTags("hospital")
@@ -88,6 +94,28 @@ export class HospitalController {
       }
     }
   }
+
+  @ApiOperation({ summary: "admit patient" })
+  @Post("/admit/patientId")
+  public async admitPatient(
+    @Req() req: IExpressRequest,
+    @Param() patientId: string,
+    @Res() res: Response,
+    @Body() body: CreateAdmissionDto
+  ): Promise<void> {
+    try {
+      const user = req.userId;
+      const data = await this.hospitalService.admitPatient(
+        body,
+        user,
+        patientId
+      );
+      ResponseManager.success(res, data);
+    } catch (e) {
+      ResponseManager.handleError(res, e);
+    }
+  }
+
   @Get("/:hospitalId")
   @ApiResponse({ status: 200, type: Hospital })
   public async getHospitalProfile(
