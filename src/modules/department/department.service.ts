@@ -39,6 +39,7 @@ export class DepartmentService {
       departmentName: body.departmentName,
       departmentEmail: body.departmentEmail,
       description: body.description,
+      departmentHead: user,
     });
 
     const token = this.jwtHelper.generateToken({
