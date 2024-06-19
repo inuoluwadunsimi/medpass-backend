@@ -2,7 +2,9 @@ import { v4 as uuidv4 } from "uuid";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { Document } from "mongoose";
-import { User, UserDocument } from "../../user/schemas";
+import { Hospital, HospitalDocument } from "./hospital.schema";
+import { DoctorDocument } from "../../department/schema/doctor.schema";
+import { Patient, PatientDocument } from "../../patient/schemas/patient.schema";
 
 @Schema({
   timestamps: true,
@@ -22,7 +24,7 @@ import { User, UserDocument } from "../../user/schemas";
     },
   },
 })
-export class Hospital {
+export class Admission {
   @ApiProperty()
   @Prop({
     type: String,
@@ -35,60 +37,48 @@ export class Hospital {
   @ApiProperty()
   @Prop({
     required: true,
-    unique: true,
     type: String,
+    ref: Hospital.name,
   })
-  email: string;
+  hospital: HospitalDocument | string;
 
   @ApiProperty()
   @Prop({
     required: true,
     type: String,
+    ref: Hospital.name,
   })
-  name: string;
+  doctor: DoctorDocument | string;
 
   @ApiProperty()
   @Prop({
     required: true,
     type: String,
+    ref: Patient.name,
   })
-  address: string;
+  patient: PatientDocument | string;
 
   @ApiProperty()
   @Prop({
-    required: true,
-    type: String,
+    type: [String],
   })
-  website_url: string;
+  complaints: string[];
 
   @ApiProperty()
   @Prop({
-    required: true,
-    type: String,
+    type: [String],
   })
-  cac_number: string;
+  symptoms: string[];
 
   @ApiProperty()
   @Prop({
-    required: true,
-    type: String,
+    type: [String],
   })
-  phone: string;
+  tests: string[];
 
   @ApiProperty()
   @Prop({
-    type: Boolean,
-    default: false,
+    type: [String],
   })
-  kycVerified: boolean;
-
-  @ApiProperty()
-  @Prop({
-    type: String,
-    ref: User.name,
-  })
-  created_by: string | UserDocument;
+  diagnosis: string[];
 }
-
-export type HospitalDocument = Hospital & Document;
-export const HospitalSchema = SchemaFactory.createForClass(Hospital);

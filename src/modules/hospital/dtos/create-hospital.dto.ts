@@ -20,6 +20,11 @@ export class CreateHospitalDto {
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty({ example: "Lagos" })
+  website_url: string;
+
+  @IsNotEmpty()
+  @IsString()
   @ApiProperty({ example: "Ikeja" })
   address: string;
 
