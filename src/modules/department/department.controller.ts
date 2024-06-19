@@ -24,6 +24,7 @@ import { AppAuthGuard } from "../auth/guards/auth.guard";
 import { DepartmentService } from "./department.service";
 import { Request, Response } from "express";
 import { Doctor } from "./schema/doctor.schema";
+import { IExpressRequest } from "../auth/jwt/jwt.interface";
 @UseGuards(AppAuthGuard)
 @Controller("hospital/:hospitalId/department")
 @ApiTags("department")
@@ -34,14 +35,12 @@ export class DepartmentController {
   @ApiResponse({ status: 201, type: Department })
   public async createDepartment(
     @Body() body: CreateDepartment,
-    @Param("hospitalId") hospitalId: string,
+    @Req() req: IExpressRequest,
     @Res() res: any
   ): Promise<void> {
+    const user = req.userId;
     try {
-      const data = await this.departmentService.createDepartment(
-        hospitalId,
-        body
-      );
+      const data = await this.departmentService.createDepartment(user, body);
       ResponseManager.success(res, {
         data,
       });

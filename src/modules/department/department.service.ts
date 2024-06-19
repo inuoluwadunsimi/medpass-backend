@@ -26,15 +26,16 @@ export class DepartmentService {
     private readonly emailService: EmailService
   ) {}
 
-  public async createDepartment(hospitalId: string, body: CreateDepartment) {
-    const hospital =
-      await this.hospitalModel.findById<HospitalDocument>(hospitalId);
+  public async createDepartment(user: string, body: CreateDepartment) {
+    const hospital = await this.hospitalModel.findOne<HospitalDocument>({
+      created_by: user,
+    });
     if (!hospital) {
       throw new NotFoundException("Hospital not found");
     }
 
     const department = await this.departmentModel.create({
-      hospital: hospitalId,
+      hospital: hospital.id,
       departmentName: body.departmentName,
       departmentEmail: body.departmentEmail,
       description: body.description,
