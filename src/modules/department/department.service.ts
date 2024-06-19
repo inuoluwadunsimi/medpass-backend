@@ -44,7 +44,7 @@ export class DepartmentService {
     const token = this.jwtHelper.generateToken({
       email: body.hodEmail,
       type: JwtType.HOD,
-      hospital: hospitalId,
+      hospital: hospital.id,
       department: department.id,
     });
 
