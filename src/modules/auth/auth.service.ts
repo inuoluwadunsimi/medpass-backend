@@ -65,6 +65,7 @@ export class AuthService {
       otp,
       deviceId,
       otpType: OtpType.SIGN_UP,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
     });
 
     await this.emailService.sendOtpMail(body.email, otp, body.fullName);
@@ -84,7 +85,6 @@ export class AuthService {
       email: body.email,
       otp: body.otp,
       deviceId,
-      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
     });
 
     if (!otp) {

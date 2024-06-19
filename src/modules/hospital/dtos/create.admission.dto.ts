@@ -2,6 +2,23 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsNotEmpty, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
+export class DosageDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: "aspirin" })
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: "3 before you wake up" })
+  dosage: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: "mg" })
+  measurement: string;
+}
+
 export class CreateAdmissionDto {
   @IsNotEmpty()
   @IsArray()
@@ -27,21 +44,4 @@ export class CreateAdmissionDto {
   @ValidateNested()
   @Type(() => DosageDto)
   treatment: DosageDto;
-}
-
-export class DosageDto {
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ example: "aspirin" })
-  name: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ example: "3 before you wake up" })
-  dosage: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ example: "mg" })
-  measurement: string;
 }

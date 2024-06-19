@@ -48,12 +48,19 @@ export class JwtHelper {
         throw new Error("This type is not supported");
     }
 
-    const accessToken = this.jwtService.sign(payload, { expiresIn });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: 2592000 });
+    const secret = this.configService.get<string>("JWT_PRIVATE_KEY");
+
+    const accessToken = this.jwtService.sign(payload, { expiresIn, secret });
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: 2592000,
+      secret,
+    });
     return { accessToken, refreshToken };
   }
 
   public verifyToken(token: string): GenerateTokenParam {
-    return this.jwtService.verify(token) as GenerateTokenParam;
+    return this.jwtService.verify(token, {
+      secret: `${this.configService.get<string>("JWT_PRIVATE_KEY")}`,
+    }) as GenerateTokenParam;
   }
 }

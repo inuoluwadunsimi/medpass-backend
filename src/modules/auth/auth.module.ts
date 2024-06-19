@@ -23,6 +23,7 @@ import { KYC, KYCSchema } from "../kyc/schemas/kyc.schema";
 import { Hospital, HospitalSchema } from "../hospital/schemas/hospital.schema";
 import { KycModule } from "../kyc/kyc.module";
 import { CloudinaryService } from "../cloudinary/cloudinary.service";
+import { JwtStrategy } from "./strategies/jwt.strategy";
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { CloudinaryService } from "../cloudinary/cloudinary.service";
     JwtHelper,
     JwtService,
     AuthService,
+    JwtStrategy,
     KycService,
     CloudinaryService,
   ],

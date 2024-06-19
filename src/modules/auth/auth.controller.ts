@@ -59,7 +59,7 @@ export class AuthController {
     try {
       await this.authService.ownerRegister(body, deviceId);
       ResponseManager.success(res, {
-        message: "Registered Successfully",
+        message: "otp sent",
       });
     } catch (err) {
       ResponseManager.handleError(res, err);
