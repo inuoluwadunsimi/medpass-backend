@@ -47,12 +47,16 @@ export class UserService {
       const hospital = await this.hospitalModel.findOne<HospitalDocument>({
         created_by: userId,
       });
-      finalUser = { ...user, hospital: hospital.id };
+      if (hospital) {
+        finalUser = { user: user, hospital: hospital.id };
+      } else {
+        finalUser = { user };
+      }
     }
     if (user.role === UserRole.DOCTOR) {
       const doctor = await this.doctorModel.findOne<DoctorDocument>({ user });
       finalUser = {
-        ...user,
+        user: user,
         hospital: doctor.hospital,
         department: doctor.department,
       };
