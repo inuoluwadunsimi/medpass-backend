@@ -89,6 +89,21 @@ export class PatientController {
     }
   }
 
+  @Get("/search")
+  @ApiResponse({ status: 200, type: [Patient] })
+  @ApiQuery({ name: "patientId", required: true, type: String })
+  public async searchPatientById(
+    @Res() res: Response,
+    @Query("patientId") patientId: string
+  ): Promise<void> {
+    try {
+      const data = await this.patientService.searchPatientById(patientId);
+      ResponseManager.success(res, { data });
+    } catch (err: any) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @Post("/record/:patientId")
   @ApiResponse({ status: 200, type: Appointment })
   public async createRecord(
@@ -130,21 +145,6 @@ export class PatientController {
   public async getRecord(@Res() res, @Param() recordId: string): Promise<void> {
     try {
       const data = await this.patientService.getRecord(recordId);
-      ResponseManager.success(res, { data });
-    } catch (err: any) {
-      ResponseManager.handleError(res, err);
-    }
-  }
-
-  @Get("/search")
-  @ApiResponse({ status: 200, type: [Patient] })
-  @ApiQuery({ name: "patientId", required: true, type: String })
-  public async searchPatientById(
-    @Res() res: Response,
-    @Query() patientId: string
-  ): Promise<void> {
-    try {
-      const data = await this.patientService.searchPatientById(patientId);
       ResponseManager.success(res, { data });
     } catch (err: any) {
       ResponseManager.handleError(res, err);

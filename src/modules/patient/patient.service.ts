@@ -65,6 +65,7 @@ export class PatientService {
   public async searchPatientById(
     patientId: string
   ): Promise<PatientDocument[]> {
+    console.log(patientId);
     const results = await this.patientModel
       .find<PatientDocument>({
         $text: { $search: patientId },
