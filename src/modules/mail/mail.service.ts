@@ -47,7 +47,7 @@ export class EmailService {
       .replace("{hospitalName}", hospitalName)
       .replace(
         "{verificationLink}",
-        `${this.configService.get<string>("FRONTEND_URL")}/auth/invite/${token}`
+        `${this.configService.get<string>("FRONTEND_URL")}admin/invite-signup?token=${token}`
       );
     await this.sendMail({
       to: email,
