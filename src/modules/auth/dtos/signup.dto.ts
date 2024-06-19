@@ -37,3 +37,10 @@ export class VerifyOtp {
   @MinLength(6)
   otp: string;
 }
+
+export class resendOtp {
+  @ApiProperty({ example: "danielolaoladeinde" })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+}

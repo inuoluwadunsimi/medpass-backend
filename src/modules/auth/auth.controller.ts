@@ -26,7 +26,7 @@ import {
 } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
-import { SignupDto, VerifyOtp } from "./dtos/signup.dto";
+import { resendOtp, SignupDto, VerifyOtp } from "./dtos/signup.dto";
 import { Request, Response } from "express";
 import { LoginDto } from "./dtos/login.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -162,13 +162,13 @@ export class AuthController {
   @Post("/otp/resend")
   @ApiResponse({ status: 200, description: "OTP sent successfully" })
   public async resendOtp(
-    @Body() email: string,
+    @Body() body: resendOtp,
     @Req() req: Request,
     @Res() res: Response
   ): Promise<void> {
     const deviceId = req.get("User-Agent");
     try {
-      await this.authService.resendOtp(email, deviceId);
+      await this.authService.resendOtp(body.email, deviceId);
       ResponseManager.success(res, {
         message: "OTP sent successfully",
       });
