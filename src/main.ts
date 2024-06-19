@@ -15,7 +15,11 @@ import { NotFoundExceptionFilter } from "./exceptions/notfound.exceptions";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const allowedOrigins = ["http://localhost:3002", "http://localhost:5173"];
+  const allowedOrigins = [
+    "http://localhost:3002",
+    "http://localhost:5173",
+    "https://eminent-eggs-curious-middle-production.pipeops.app",
+  ];
 
   app.enableCors({
     origin: allowedOrigins,

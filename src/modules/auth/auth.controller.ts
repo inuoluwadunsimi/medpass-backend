@@ -26,7 +26,12 @@ import {
 } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { ConfigService } from "@nestjs/config";
-import { resendOtp, SignupDto, VerifyOtp } from "./dtos/signup.dto";
+import {
+  doctorSignupDto,
+  resendOtp,
+  SignupDto,
+  VerifyOtp,
+} from "./dtos/signup.dto";
 import { Request, Response } from "express";
 import { LoginDto } from "./dtos/login.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -76,7 +81,7 @@ export class AuthController {
     type: AuthResponse,
   })
   public async doctorRegister(
-    @Body() body: SignupDto,
+    @Body() body: doctorSignupDto,
     @Req() req: Request,
     @Res() res: Response,
     @Query("token") token: string

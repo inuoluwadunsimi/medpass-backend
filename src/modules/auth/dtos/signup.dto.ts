@@ -25,6 +25,17 @@ export class SignupDto {
   password: string;
 }
 
+export class doctorSignupDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: "Joshua" })
+  fullName: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ example: "" })
+  password: string;
+}
+
 export class VerifyOtp {
   @ApiProperty({ example: "danielolaoladeinde" })
   @IsNotEmpty()

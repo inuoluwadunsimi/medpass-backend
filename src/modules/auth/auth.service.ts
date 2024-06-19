@@ -148,7 +148,7 @@ export class AuthService {
     }
 
     await this.userAuthModel.create({
-      email: body.email,
+      email: decoded.email,
       password: passwordHash,
       user: user.id,
       recognisedDevice: [deviceId],
@@ -162,7 +162,7 @@ export class AuthService {
     });
 
     const response = await this.userService.saveUserToken({
-      email: body.email,
+      email: decoded.email,
       userId: user.id,
       type: JwtType.USER,
       deviceId,
