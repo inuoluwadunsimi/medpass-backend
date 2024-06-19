@@ -103,6 +103,13 @@ export class DepartmentService {
     return await this.doctorModel.find({ department: departmentId });
   }
 
+  public async getDepartmentRecords(departmentId: string) {
+    return await this.appointmentModel
+      .find<AppointmentDocument>({ department: departmentId })
+      .populate("hospital")
+      .populate("department");
+  }
+
   public async getDepartment(departmentId: string) {
     const department = await this.departmentModel
       .findOne<DepartmentDocument>({

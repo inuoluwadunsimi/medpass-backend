@@ -65,6 +65,23 @@ export class DepartmentController {
     }
   }
 
+  @ApiResponse({ status: 200, type: [Department] })
+  @Get("/records")
+  public async getDepartmentRecords(
+    @Res() res: any,
+    @Param("departmentId") departmentId: string
+  ): Promise<void> {
+    try {
+      const data =
+        await this.departmentService.getDepartmentRecords(departmentId);
+      ResponseManager.success(res, {
+        data,
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @ApiResponse({
     status: 200,
   })
