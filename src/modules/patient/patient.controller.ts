@@ -155,7 +155,7 @@ export class PatientController {
   @ApiResponse({ status: 200, type: [Patient] })
   public async searchDiagnosis(
     @Res() res: Response,
-    @Query() search: string,
+    @Query("search") search: string,
     @Param() patientId: string
   ): Promise<void> {
     try {
@@ -170,7 +170,7 @@ export class PatientController {
   @ApiResponse({ status: 200, type: [Patient] })
   public async searchByRecordId(
     @Res() res,
-    @Query() recordId: string
+    @Query("recordId") recordId: string
   ): Promise<void> {
     try {
       const data = await this.patientService.searchByRecordId(recordId);
