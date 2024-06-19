@@ -65,6 +65,25 @@ export class DepartmentController {
     }
   }
 
+  @ApiResponse({
+    status: 200,
+  })
+  @Get("/dashboard/:departmentId")
+  public async getDashboard(
+    @Res() res: any,
+    @Param("hospitalId") hospitalId: string,
+    @Param("hospitalId") departmentId: string
+  ): Promise<void> {
+    try {
+      const data = await this.departmentService.getDashboard(departmentId);
+      ResponseManager.success(res, {
+        data,
+      });
+    } catch (err) {
+      ResponseManager.handleError(res, err);
+    }
+  }
+
   @ApiOperation({ summary: "invite doctor to department" })
   @ApiResponse({ status: 200, description: "invite email sent" })
   @Post("/doctor")

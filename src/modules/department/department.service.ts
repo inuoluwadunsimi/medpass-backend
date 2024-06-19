@@ -15,6 +15,15 @@ import { JwtHelper } from "../auth/jwt/jwt.helper";
 import { JwtType } from "../auth/jwt/jwt.interface";
 import { EmailService } from "../mail/mail.service";
 import { User, UserDocument } from "../user/schemas";
+import {
+  Appointment,
+  AppointmentDocument,
+} from "../patient/schemas/appointment.schema";
+import {
+  Admission,
+  AdmissionDocument,
+  AdmissionStatus,
+} from "../hospital/schemas/admission.schema";
 
 @Injectable()
 export class DepartmentService {
@@ -24,7 +33,10 @@ export class DepartmentService {
     @InjectModel(Hospital.name) private hospitalModel: Model<HospitalDocument>,
     @InjectModel(Doctor.name) private doctorModel: Model<DoctorDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-
+    @InjectModel(Appointment.name)
+    private appointmentModel: Model<AppointmentDocument>,
+    @InjectModel(Admission.name)
+    private addmissionDocument: Model<AdmissionDocument>,
     private jwtHelper: JwtHelper,
     private readonly emailService: EmailService
   ) {}
@@ -126,5 +138,27 @@ export class DepartmentService {
       hospital.name,
       token.accessToken
     );
+  }
+
+  public async getDashboard(departmentId: string) {
+    const doctorCount = await this.doctorModel
+      .find({ department: departmentId })
+      .countDocuments();
+
+    const recordCount = await this.appointmentModel
+      .find({
+        department: departmentId,
+      })
+      .countDocuments();
+
+    const admissionCount = await this.addmissionDocument
+      .find({ status: AdmissionStatus.ADMITTED, department: departmentId })
+      .countDocuments();
+
+    return {
+      doctorCount,
+      recordCount,
+      admissionCount,
+    };
   }
 }
