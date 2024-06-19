@@ -54,13 +54,22 @@ export class DepartmentService {
       token.accessToken
     );
 
-    return department;
+    return department.populate({
+      path: "departmentHead",
+      populate: "user",
+    });
   }
 
   public async getDepartments(
     hospitalId: string
   ): Promise<DepartmentDocument[]> {
-    return await this.departmentModel.find({ hospital: hospitalId });
+    return await this.departmentModel
+      .find({ hospital: hospitalId })
+      .populate({
+        path: "departmentHead",
+        populate: "user",
+      })
+      .populate("hospital");
   }
 
   public async getDepartmentDoctors(
@@ -70,9 +79,15 @@ export class DepartmentService {
   }
 
   public async getDepartment(departmentId: string) {
-    const department = await this.departmentModel.findOne<DepartmentDocument>({
-      _id: departmentId,
-    });
+    const department = await this.departmentModel
+      .findOne<DepartmentDocument>({
+        _id: departmentId,
+      })
+      .populate({
+        path: "departmentHead",
+        populate: "user",
+      })
+      .populate("hospital");
     if (!department) {
       throw new NotFoundException("Department not found");
     }
