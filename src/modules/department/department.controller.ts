@@ -86,6 +86,8 @@ export class DepartmentController {
   @Get("/doctor/:departmentId")
   public async getDepartmentDoctors(
     @Res() res: any,
+    @Param("hospitalId") hospitalId: string,
+
     @Param("departmentId") departmentId: string
   ): Promise<void> {
     try {
@@ -102,7 +104,8 @@ export class DepartmentController {
   @ApiResponse({ status: 200, type: Department })
   @Get(":departmentId")
   public async getDepartment(
-    @Param() departmentId: string,
+    @Param("hospitalId") hospitalId: string,
+    @Param("departmentId") departmentId: string,
     @Res() res: any
   ): Promise<void> {
     try {
