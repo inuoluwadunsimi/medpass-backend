@@ -56,6 +56,7 @@ export class HospitalService {
       patient: patientId,
       doctor: doctor.id,
       hospital: hospital,
+      admissionDate: new Date().toISOString(),
       department,
       ...body,
     });

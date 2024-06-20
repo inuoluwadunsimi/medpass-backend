@@ -47,10 +47,6 @@ export class CreateAdmissionDto {
   diagnosis: string[];
 
   @IsNotEmpty()
-  @IsDateString()
-  admissionDate: Date;
-
-  @IsNotEmpty()
   @ValidateNested()
   @Type(() => DosageDto)
   treatment: DosageDto;

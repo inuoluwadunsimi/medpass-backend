@@ -148,7 +148,7 @@ export class HospitalController {
   @Post("/admit/:patientId")
   public async admitPatient(
     @Req() req: IExpressRequest,
-    @Param() patientId: string,
+    @Param("patientId") patientId: string,
     @Res() res: Response,
     @Body() body: CreateAdmissionDto
   ): Promise<void> {
