@@ -158,7 +158,7 @@ export class AuthService {
     await this.doctorModel.create({
       hospital: decoded.hospital,
       user: user.id,
-      department: user.id,
+      department: decoded.department,
     });
 
     const response = await this.userService.saveUserToken({
