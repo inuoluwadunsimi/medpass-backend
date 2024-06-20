@@ -88,7 +88,7 @@ export class HospitalController {
   @ApiResponse({ status: 200, description: "kyc document uploaded" })
   @ApiConsumes("multipart/form-data")
   public async kycUpload(
-    @Param() hospitalId: string,
+    @Param("hospitalId") hospitalId: string,
     @Body() kycType: KycEnums[],
     @Res() res: Response,
     @UploadedFiles() files: Express.Multer.File[]
@@ -120,7 +120,7 @@ export class HospitalController {
   @ApiOperation({ summary: "get all admitted patients" })
   @Get("/admitted-patient/:hospitalId")
   public async getAllAdmittedPatients(
-    @Param() hospitalId: string,
+    @Param("hospitalId") hospitalId: string,
     @Res() res: Response,
     @Query()
     query: {
@@ -168,7 +168,7 @@ export class HospitalController {
   @Get("/:hospitalId")
   @ApiResponse({ status: 200, type: Hospital })
   public async getHospitalProfile(
-    @Param() hospitalId: string,
+    @Param("hospitalId") hospitalId: string,
     @Res() res: Response
   ): Promise<void> {
     try {

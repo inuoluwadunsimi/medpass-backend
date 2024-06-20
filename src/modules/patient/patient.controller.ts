@@ -53,7 +53,7 @@ export class PatientController {
   public async forwardToDepartment(
     @Res() res,
     @Body() departmentId: string,
-    @Param() recordId: string
+    @Param("recordId") recordId: string
   ): Promise<void> {
     try {
       await this.patientService.forwardToDepartment(recordId, departmentId);
@@ -76,7 +76,7 @@ export class PatientController {
   public async getAllRecords(
     @Res() res: Response,
     @Query() query: RecordQuery,
-    @Param() patientId: string
+    @Param("patientId") patientId: string
   ): Promise<void> {
     try {
       const data = await this.patientService.getAllRecords({
@@ -110,7 +110,7 @@ export class PatientController {
     @Res() res,
     @Req() req: IExpressRequest,
     @Body() body: CreateAppointmentDto,
-    @Param() patientId: string
+    @Param("patientId") patientId: string
   ): Promise<void> {
     const user = req.userId;
     try {
@@ -130,7 +130,7 @@ export class PatientController {
   public async updateRecord(
     @Res() res,
     @Body() body: UpdateAppointmentDto,
-    @Param() recordId: string
+    @Param("recordId") recordId: string
   ): Promise<void> {
     try {
       const data = await this.patientService.updateRecord(recordId, body);
@@ -156,7 +156,7 @@ export class PatientController {
   public async searchDiagnosis(
     @Res() res: Response,
     @Query("search") search: string,
-    @Param() patientId: string
+    @Param("patientId") patientId: string
   ): Promise<void> {
     try {
       const data = await this.patientService.searchDiagnosis(search, patientId);
@@ -184,7 +184,7 @@ export class PatientController {
   @ApiResponse({ status: 200, type: Patient })
   public async fillPatientBiodata(
     @Res() res: Response,
-    @Param() patientId: string,
+    @Param("patientId") patientId: string,
     @Body() body: CreateBioData
   ): Promise<void> {
     try {
@@ -202,7 +202,7 @@ export class PatientController {
   @ApiResponse({ status: 200, type: Patient })
   public async getPatientById(
     @Res() res,
-    @Param() patientId: string
+    @Param("patientId") patientId: string
   ): Promise<void> {
     try {
       const data = await this.patientService.getPatientById(patientId);
