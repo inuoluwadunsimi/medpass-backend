@@ -107,9 +107,11 @@ export class PatientService {
   }
 
   public async getPatientById(patientId: string): Promise<PatientDocument> {
-    const patient = await this.patientModel.findOne<PatientDocument>({
-      _id: patientId,
-    });
+    const patient = await this.patientModel
+      .findOne<PatientDocument>({
+        _id: patientId,
+      })
+      .populate("user");
     if (!patient) {
       throw new NotFoundException("Patient not found");
     }
