@@ -1,7 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  IS_DATE_STRING,
   IsArray,
   IsDate,
+  IsDateString,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -47,8 +49,8 @@ export class PrescriptionDto {
 
 export class CreateAppointmentDto {
   @ApiProperty({ example: "2021-09-01T00:00:00.000Z" })
-  @IsDate()
-  date: Date;
+  @IsDateString()
+  date: String;
 
   @ApiProperty({ example: ["running stomach", "headache"] })
   @IsArray()
