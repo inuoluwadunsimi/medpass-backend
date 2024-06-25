@@ -152,7 +152,7 @@ export class PatientController {
   }
 
   @Get("/search/ai/:patientId")
-  @ApiResponse({ status: 200, type: [Patient] })
+  @ApiResponse({ status: 200, type: [Appointment] })
   public async searchDiagnosis(
     @Res() res: Response,
     @Query("search") search: string,

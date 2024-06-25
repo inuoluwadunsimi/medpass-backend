@@ -210,8 +210,9 @@ export class PatientService {
         $lte: to,
       };
     }
-    const records =
-      await this.appointmentModel.find<AppointmentDocument>(filter);
+    const records = await this.appointmentModel
+      .find<AppointmentDocument>(filter)
+      .populate({ path: "doctor", populate: "user" });
     return records;
   }
 
