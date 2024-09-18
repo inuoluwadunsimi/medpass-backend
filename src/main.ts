@@ -18,7 +18,7 @@ async function bootstrap() {
   const allowedOrigins = [
     "http://localhost:3002",
     "http://localhost:5173",
-    "https://eminent-eggs-curious-middle-production.pipeops.app",
+    "https://medpass-application.vercel.app",
   ];
 
   app.enableCors({
